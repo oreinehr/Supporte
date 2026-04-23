@@ -188,6 +188,106 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  /* ── Scroll reveal ── */
+  (function () {
+    const GROUPS = [
+      ['.flow-track',           '.flow-step'],
+      ['.segments-grid',        '.seg-card'],
+      ['.diffs-right',          '.diff-item'],
+      ['.proof-card',           '.proof-item'],
+      ['.mod-grid',             '.mod-card'],
+      ['.features-grid',        '.feat-card'],
+      ['.service-grid',         '.service-card'],
+      ['.process-list',         '.process-item'],
+      ['.units-strip',          '.unit-cell'],
+      ['.seg-detail-grid',      '.seg-detail-card'],
+      ['.hubs',                 '.hub'],
+      ['.modais-grid',          '.modal-card'],
+      ['.kpi-band',             '.kpi-cell'],
+      ['.tower-pillar',         '.tower-module'],
+      ['.badge-wall',           '.tag'],
+      ['.diffs-grid',           '.diffs-left'],
+    ];
+
+    const SINGLES = [
+      '.sec-head',
+      '.hero-photo-panel',
+      '.integ-photo-band',
+      '.clients-inner',
+      '.map-wrap',
+      '.ops-strip',
+    ];
+
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+
+    function prep(el, delay) {
+      el.classList.add('js-reveal');
+      if (delay) el.style.transitionDelay = delay + 'ms';
+      observer.observe(el);
+    }
+
+    GROUPS.forEach(function (pair) {
+      document.querySelectorAll(pair[0]).forEach(function (parent) {
+        parent.querySelectorAll(pair[1]).forEach(function (child, i) {
+          prep(child, i * 80);
+        });
+      });
+    });
+
+    SINGLES.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) { prep(el, 0); });
+    });
+  })();
+
+  /* ── Counter animation ── */
+  (function () {
+    const proofNums = document.querySelectorAll('.proof-item .num, .kpi-cell .n');
+    if (!proofNums.length) return;
+
+    const counterObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        counterObs.unobserve(el);
+
+        // Collect text nodes (number part only, ignoring <span> children)
+        const spanEl = el.querySelector('span');
+        const suffix = spanEl ? spanEl.outerHTML : '';
+        const rawText = el.textContent;
+        const numMatch = rawText.match(/[\d,\.]+/);
+        if (!numMatch) return;
+
+        const rawNum = numMatch[0].replace(',', '.');
+        const target = parseFloat(rawNum);
+        const isInt = rawNum.indexOf('.') === -1;
+        const prefix = rawText.startsWith('+') ? '+' : '';
+
+        let start = null;
+        const dur = 1400;
+
+        function tick(ts) {
+          if (!start) start = ts;
+          const prog = Math.min((ts - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - prog, 3);
+          const val = isInt ? Math.round(target * eased) : (target * eased).toFixed(1);
+          el.innerHTML = prefix + val + suffix;
+          if (prog < 1) requestAnimationFrame(tick);
+          else el.innerHTML = prefix + (isInt ? target : target.toFixed(1)) + suffix;
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+
+    proofNums.forEach(function (el) { counterObs.observe(el); });
+  })();
+
   /* ── Contact page own form (contato.html) ── */
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
