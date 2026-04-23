@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Armazenagem — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   ARMAZENAGEM PAGE — extra styles
+   ============================================================ */
+.page-hero{
+  background: var(--ink-900);
+  padding: 100px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 70% 60% at 70% 50%, rgba(241,90,36,.16) 0%, transparent 70%);
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.page-hero .breadcrumb{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:32px; display:flex; align-items:center; gap:8px; }
+.page-hero .breadcrumb a{ color:var(--ink-400); }
+.page-hero .breadcrumb a:hover{ color:var(--white); }
+.page-hero .breadcrumb span{ color:var(--brand-orange); }
+.page-hero h1{ color:var(--white); margin-bottom:20px; }
+.page-hero h1 em{ font-style:normal; color:var(--brand-orange); }
+.page-hero .lede{ color:var(--ink-300); font-size:18px; line-height:1.6; margin-bottom:40px; }
+.page-hero .hero-stats{ display:flex; gap:40px; padding-top:32px; border-top:1px solid rgba(255,255,255,.08); }
+.page-hero .hero-stats .item .num{ font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--white); letter-spacing:-0.03em; line-height:1; }
+.page-hero .hero-stats .item .num span{ color:var(--brand-orange); }
+.page-hero .hero-stats .item .lbl{ font-size:13px; color:var(--ink-400); margin-top:4px; }
+
+/* Hero visual */
+.warehouse-visual{
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--r-xl);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wh-row{ display:flex; gap:8px; align-items:stretch; }
+.wh-shelf{
+  flex:1; background:rgba(241,90,36,.1); border:1px solid rgba(241,90,36,.2);
+  border-radius: 8px; padding:16px 14px;
+  display:flex; flex-direction:column; gap:6px;
+}
+.wh-shelf .label{ font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--brand-orange); }
+.wh-shelf .val{ font-family:var(--font-display); font-size:22px; font-weight:700; color:white; letter-spacing:-0.03em; }
+.wh-shelf .sub{ font-size:11px; color:var(--ink-400); }
+.wh-stat{
+  flex:1; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:8px; padding:16px 14px;
+  display:flex; flex-direction:column; gap:6px;
+}
+.wh-stat .label{ font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); }
+.wh-stat .val{ font-size:20px; font-weight:700; font-family:var(--font-display); color:white; letter-spacing:-0.02em; }
+.wh-stat .bar{ height:3px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; margin-top:4px; }
+.wh-stat .bar-fill{ height:100%; background:var(--brand-orange); border-radius:999px; }
+
+/* Modalities */
+.mod-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.mod-card{
+  border:1px solid var(--ink-100); border-radius:var(--r-lg);
+  padding:36px 32px; display:flex; flex-direction:column; gap:16px;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+}
+.mod-card:hover{ border-color:var(--brand-orange); transform:translateY(-4px); box-shadow:var(--shadow-2); }
+.mod-card .ico{
+  width:52px; height:52px; border-radius:var(--r-md);
+  background:var(--brand-orange-100); display:grid; place-items:center;
+  color:var(--brand-orange);
+}
+.mod-card h3{ font-size:22px; margin:0; }
+.mod-card p{ color:var(--ink-500); font-size:15px; line-height:1.6; margin:0; flex:1; }
+.mod-card ul{ list-style:none; display:flex; flex-direction:column; gap:8px; }
+.mod-card ul li{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-600); }
+.mod-card ul li::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0; }
+
+/* Process */
+.process-list{ display:flex; flex-direction:column; gap:0; }
+.process-item{
+  display:grid; grid-template-columns:80px 1fr; gap:32px;
+  padding:36px 0; border-bottom:1px solid var(--ink-100);
+  align-items:start;
+}
+.process-item:last-child{ border-bottom:none; }
+.process-num{
+  font-family:var(--font-display); font-size:48px; font-weight:700;
+  color:var(--brand-orange-100); letter-spacing:-0.04em; line-height:1;
+}
+.process-item h4{ margin-bottom:8px; font-size:18px; }
+.process-item p{ color:var(--ink-500); font-size:15px; line-height:1.6; margin:0; }
+
+/* Units strip */
+.units-strip{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:2px;
+  background:var(--ink-100); border-radius:var(--r-lg); overflow:hidden;
+}
+.unit-cell{
+  background:var(--white); padding:32px 28px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.unit-cell .tag{ font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-300); }
+.unit-cell .city{ font-family:var(--font-display); font-size:20px; font-weight:700; color:var(--ink-900); }
+.unit-cell .area{ font-family:var(--font-display); font-size:28px; font-weight:700; color:var(--brand-orange); letter-spacing:-0.03em; line-height:1; margin-top:4px; }
+.unit-cell .role{ font-size:13px; color:var(--ink-500); }
+
+@media(max-width:1024px){
+  .page-hero .container{ grid-template-columns:1fr; }
+  .mod-grid{ grid-template-columns:1fr 1fr; }
+  .units-strip{ grid-template-columns:1fr 1fr; }
+}
+@media(max-width:768px){
+  .mod-grid{ grid-template-columns:1fr; }
+  .units-strip{ grid-template-columns:1fr; }
+  .page-hero{ padding:80px 0 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html">Integração</a>
+      <a href="armazenagem.html" class="active">Armazenagem</a>
+      <a href="transportes.html">Transportes</a>
+      <a href="distribuicao.html">Distribuição</a>
+      <a href="segmentos.html">Segmentos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="contato.html">Contato</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div>
+      <div class="breadcrumb">
+        <a href="index.html">Supporte Logística</a>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Armazenagem</span>
+      </div>
+      <span class="eyebrow">Soluções de armazenagem</span>
+      <h1 style="margin-top:16px">Estoque sob controle com <em>+99% de acuracidade</em>.</h1>
+      <p class="lede">Armazéns gerais, entrepostos e portos secos com tecnologia, rigor operacional e presença em quatro estados brasileiros.</p>
+      <div class="hero-cta" style="margin-bottom:40px">
+        <a class="btn btn-primary" href="contato.html">Solicite um orçamento <span>→</span></a>
+        <a class="btn btn-ghost" href="#modalidades">Ver modalidades</a>
+      </div>
+      <div class="hero-stats">
+        <div class="item"><div class="num">+99<span>%</span></div><div class="lbl">acuracidade de estoque</div></div>
+        <div class="item"><div class="num">619<span>k</span></div><div class="lbl">m² de área total</div></div>
+        <div class="item"><div class="num">4</div><div class="lbl">unidades no Brasil</div></div>
+      </div>
+    </div>
+    <div class="warehouse-visual">
+      <div class="wh-row">
+        <div class="wh-shelf">
+          <div class="label">Acuracidade</div>
+          <div class="val">99,4%</div>
+          <div class="sub">Média auditada</div>
+        </div>
+        <div class="wh-shelf">
+          <div class="label">Área total</div>
+          <div class="val">619k</div>
+          <div class="sub">m² operacionais</div>
+        </div>
+      </div>
+      <div class="wh-row">
+        <div class="wh-stat">
+          <div class="label">Uberlândia / MG</div>
+          <div class="val">300.000 m²</div>
+          <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+      <div class="wh-row">
+        <div class="wh-stat">
+          <div class="label">Ipojuca / PE</div>
+          <div class="val">270.000 m²</div>
+          <div class="bar"><div class="bar-fill" style="width:90%"></div></div>
+        </div>
+      </div>
+      <div class="wh-row">
+        <div class="wh-stat">
+          <div class="label">Manaus / AM</div>
+          <div class="val">36.500 m²</div>
+          <div class="bar"><div class="bar-fill" style="width:22%"></div></div>
+        </div>
+        <div class="wh-stat">
+          <div class="label">Barueri / SP</div>
+          <div class="val">12.500 m²</div>
+          <div class="bar"><div class="bar-fill" style="width:8%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-card">
+      <div class="proof-item"><div class="num">+99<span>%</span></div><div class="lbl">acuracidade de estoque auditada</div></div>
+      <div class="proof-item"><div class="num">619<span>k</span></div><div class="lbl">m² de capacidade operacional</div></div>
+      <div class="proof-item"><div class="num">4</div><div class="lbl">unidades estratégicas</div></div>
+      <div class="proof-item"><div class="num">24<span>h</span></div><div class="lbl">monitoramento de estoque</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODALIDADES -->
+<section class="sec sec-white" id="modalidades">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Modalidades</span>
+        <h2 style="margin-top:16px">Três soluções de armazenagem para <em>cada necessidade</em>.</h2>
+      </div>
+      <p>Da armazenagem simples ao regime aduaneiro especial — escolha a modalidade que se adapta à sua operação.</p>
+    </div>
+    <div class="mod-grid">
+      <div class="mod-card">
+        <div class="ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        </div>
+        <h3>Armazém Geral</h3>
+        <p>Armazenagem de mercadorias com emissão de Certificado de Depósito e Warrant. Controle de estoque rigoroso com WMS integrado.</p>
+        <ul>
+          <li>Controle WMS em tempo real</li>
+          <li>Emissão de Certificado de Depósito</li>
+          <li>Seguro de mercadorias incluso</li>
+          <li>Inventário mensal auditado</li>
+          <li>Picking e packing sob demanda</li>
+        </ul>
+      </div>
+      <div class="mod-card" style="border-color:var(--brand-orange); box-shadow:var(--shadow-glow)">
+        <div class="ico" style="background:var(--brand-orange); color:white">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3>Porto Seco</h3>
+        <p>Terminal alfandegado para importação e exportação com agilidade no desembaraço aduaneiro e menor custo logístico portuário.</p>
+        <ul>
+          <li>Habilitado pela Receita Federal</li>
+          <li>Desembaraço aduaneiro in-house</li>
+          <li>DTA — Despacho de Trânsito Aduaneiro</li>
+          <li>Drawback e regimes especiais</li>
+          <li>Unidades em Uberlândia e Ipojuca</li>
+        </ul>
+      </div>
+      <div class="mod-card">
+        <div class="ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>Entreposto ZFM</h3>
+        <p>Entreposto da Zona Franca de Manaus habilitado para receber e armazenar mercadorias com os benefícios fiscais da ZFM.</p>
+        <ul>
+          <li>Benefícios fiscais da Zona Franca</li>
+          <li>Localizado em Manaus / AM</li>
+          <li>Controle aduaneiro especializado</li>
+          <li>Integração com modais fluvial e aéreo</li>
+          <li>Área de 36.500 m²</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="sec sec-soft">
+  <div class="container">
+    <div class="diffs-grid">
+      <div class="diffs-left">
+        <span class="eyebrow">Diferenciais</span>
+        <h2 style="margin-top:16px">Operação com <em>tecnologia e controle</em> de ponta a ponta.</h2>
+        <p>Cada processo é monitorado, documentado e auditado — do recebimento à expedição.</p>
+        <div class="badge-wall">
+          <span class="tag">WMS Integrado</span>
+          <span class="tag">CCTV 24h</span>
+          <span class="tag">Controle de temperatura</span>
+          <span class="tag">Seguro de mercadorias</span>
+          <span class="tag">Inventário auditado</span>
+          <span class="tag">Picking & Packing</span>
+        </div>
+      </div>
+      <div class="diffs-right">
+        <div class="diff-item">
+          <div class="num">01</div>
+          <div><h4>Acuracidade de +99% auditada</h4><p>Controle WMS com leitura de código de barras e RFID. Divergências detectadas e corrigidas antes da expedição.</p></div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">02</div>
+          <div><h4>Monitoramento 24 horas</h4><p>CCTV, controle de acesso e sensores de temperatura garantem a integridade total das mercadorias armazenadas.</p></div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">03</div>
+          <div><h4>Regime aduaneiro especializado</h4><p>Porto Seco e Entreposto ZFM habilitados — desembaraço ágil com equipe dedicada de comércio exterior.</p></div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">04</div>
+          <div><h4>Flexibilidade e escalabilidade</h4><p>Capacidade para expandir ou reduzir área conforme a sazonalidade da sua operação, sem custos fixos excessivos.</p></div>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Como funciona</span>
+        <h2 style="margin-top:16px">Do recebimento à <em>expedição</em>, sem ruídos.</h2>
+      </div>
+      <p>Processo padronizado e auditável em cada etapa — para você ter visibilidade e previsibilidade na operação.</p>
+    </div>
+    <div class="process-list">
+      <div class="process-item">
+        <div class="process-num">01</div>
+        <div>
+          <h4>Recebimento e conferência</h4>
+          <p>Toda mercadoria é recebida, conferida quantitativamente e qualitativamente, fotografada e lançada no WMS com código de barras ou RFID. Avarias e divergências são registradas no ato do recebimento.</p>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">02</div>
+        <div>
+          <h4>Endereçamento e armazenagem</h4>
+          <p>O sistema define o endereço ideal de armazenagem conforme critérios de giro, peso, volume e regime tributário. Cada posição é rastreável e visualizável no portal do cliente em tempo real.</p>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">03</div>
+        <div>
+          <h4>Gestão de estoque contínua</h4>
+          <p>Inventários rotativos e cíclicos mantêm a acuracidade acima de 99%. Relatórios diários, semanais e mensais são disponibilizados no portal do cliente com histórico completo de movimentações.</p>
+        </div>
+      </div>
+      <div class="process-item">
+        <div class="process-num">04</div>
+        <div>
+          <h4>Picking, packing e expedição</h4>
+          <p>Separação e embalagem conforme as especificações do cliente. Cada pedido é conferido antes da expedição, com emissão de NF, CTe e documentos aduaneiros quando aplicável.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIDADES -->
+<section class="sec sec-dark map-sec">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Nossas unidades</span>
+        <h2 style="margin-top:16px">Cobertura estratégica em <em>todo o Brasil</em>.</h2>
+      </div>
+      <p>Quatro unidades posicionadas nos principais corredores logísticos brasileiros.</p>
+    </div>
+    <div class="units-strip" style="margin-top:48px">
+      <div class="unit-cell">
+        <div class="tag">Unidade 01 · Matriz</div>
+        <div class="city">Uberlândia / MG</div>
+        <div class="area">300.000 m²</div>
+        <div class="role">Armazéns Gerais · Porto Seco · Matriz operacional</div>
+      </div>
+      <div class="unit-cell">
+        <div class="tag">Unidade 02 · Nordeste</div>
+        <div class="city">Ipojuca / PE</div>
+        <div class="area">270.000 m²</div>
+        <div class="role">Porto Seco · Porto de Suape · Nordeste portuário</div>
+      </div>
+      <div class="unit-cell">
+        <div class="tag">Unidade 03 · Norte</div>
+        <div class="city">Manaus / AM</div>
+        <div class="area">36.500 m²</div>
+        <div class="role">Entreposto da Zona Franca · Modais fluvial e aéreo</div>
+      </div>
+      <div class="unit-cell">
+        <div class="tag">Unidade 04 · Sudeste</div>
+        <div class="city">Barueri / SP</div>
+        <div class="area">12.500 m²</div>
+        <div class="role">Armazéns Gerais · Grande São Paulo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Próximo passo</span>
+    <h2 style="margin-top:20px">Visita técnica <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">gratuita</em> às nossas unidades.</h2>
+    <p>Agende uma visita e conheça de perto a operação Supporte — nossos especialistas mapeiam sua necessidade e propõem a solução ideal.</p>
+    <a class="btn btn-dark" href="contato.html">Solicite um orçamento →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">Rodovia BR-365, km 622, s/n<br>Uberlândia — MG<br>+55 (34) 3228-9500</div>
+      </div>
+      <div class="foot-col"><h5>Soluções</h5><ul>
+        <li><a href="armazenagem.html">Armazenagem</a></li>
+        <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+        <li><a href="armazenagem.html">Porto Seco</a></li>
+        <li><a href="transportes.html">Transportes</a></li>
+        <li><a href="integracao.html">Torre de Controle</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Empresa</h5><ul>
+        <li><a href="segmentos.html">Segmentos</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">A Supporte</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Contato</h5><ul>
+        <li><a href="contato.html">Solicitar orçamento</a></li>
+        <li><a href="suporte.html">Suporte</a></li>
+        <li><a href="#">Portal do Cliente</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

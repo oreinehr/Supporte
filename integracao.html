@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Integração Logística — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   INTEGRAÇÃO PAGE — extra styles
+   ============================================================ */
+
+/* Tower visual */
+.tower-visual {
+  position: relative;
+  background: var(--ink-800);
+  border-radius: var(--r-xl);
+  padding: clamp(40px, 5vw, 64px);
+  overflow: hidden;
+}
+.tower-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px 400px at 50% 30%, rgba(241,90,36,.2), transparent 70%);
+  pointer-events: none;
+}
+.tower-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 220px 1fr;
+  gap: 40px;
+  align-items: center;
+}
+.tower-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.tower-module {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color .2s, background .2s;
+}
+.tower-module:hover {
+  border-color: var(--brand-orange);
+  background: rgba(241,90,36,.06);
+}
+.tower-module .ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(241,90,36,.15);
+  border: 1px solid rgba(241,90,36,.3);
+  display: grid;
+  place-items: center;
+  color: var(--brand-orange);
+  flex-shrink: 0;
+}
+.tower-module h5 {
+  color: white;
+  font-size: 14px;
+  font-family: var(--font-display);
+  margin-bottom: 2px;
+}
+.tower-module p {
+  font-size: 12px;
+  color: var(--ink-300);
+}
+.tower-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.tower-hub {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--brand-orange);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(241,90,36,.4), 0 0 0 16px rgba(241,90,36,.1), 0 0 0 32px rgba(241,90,36,.05);
+  flex-shrink: 0;
+  z-index: 2;
+}
+.tower-hub span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.8);
+  display: block;
+  margin-bottom: 4px;
+}
+.tower-hub strong {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: white;
+  font-weight: 700;
+  line-height: 1.2;
+  display: block;
+}
+.tower-line {
+  flex: 1;
+  width: 2px;
+  min-height: 32px;
+  background: repeating-linear-gradient(180deg, var(--brand-orange) 0 6px, transparent 6px 12px);
+  position: relative;
+}
+.tower-line::before,
+.tower-line::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brand-orange);
+}
+.tower-line::before { top: 0; }
+.tower-line::after  { bottom: 0; }
+
+/* Capabilities grid */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.cap-card {
+  background: var(--white);
+  border: 1px solid var(--ink-100);
+  border-radius: var(--r-lg);
+  padding: clamp(24px, 3vw, 36px);
+  position: relative;
+  overflow: hidden;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+.cap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2);
+  border-color: var(--brand-orange);
+}
+.cap-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--brand-orange);
+  letter-spacing: .14em;
+  margin-bottom: 20px;
+}
+.cap-card h4 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.cap-card p {
+  color: var(--ink-500);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.cap-card .tag-list {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cap-card .tag-list span {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ink-100);
+  font-size: 12px;
+  color: var(--ink-500);
+  background: var(--ink-50);
+}
+.cap-card::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--brand-orange-100), transparent 70%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cap-card:hover::after {
+  opacity: 1;
+}
+
+/* Transportadoras section */
+.carriers-dark {
+  background: var(--ink-800);
+  border-radius: var(--r-xl);
+  padding: clamp(40px, 6vw, 72px);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+.carriers-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(700px 400px at 100% 50%, rgba(241,90,36,.15), transparent 70%);
+  pointer-events: none;
+}
+.carriers-big {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(80px, 12vw, 140px);
+  color: white;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+}
+.carriers-big span {
+  color: var(--brand-orange);
+}
+.carriers-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .14em;
+  color: var(--ink-300);
+  text-transform: uppercase;
+  margin-top: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Process steps */
+.process-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 32px;
+  align-items: start;
+  padding-bottom: 48px;
+  position: relative;
+}
+.process-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 40px;
+  top: 80px;
+  bottom: 0;
+  width: 2px;
+  background: var(--ink-100);
+}
+.process-dot {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid var(--brand-orange);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--brand-orange);
+  font-size: 18px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+.process-dot::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed var(--brand-orange);
+  opacity: .4;
+}
+.process-body h3 {
+  font-size: clamp(20px, 2vw, 26px);
+  margin-bottom: 10px;
+  padding-top: 24px;
+}
+.process-body p {
+  color: var(--ink-500);
+  max-width: 640px;
+  font-size: 15px;
+}
+.process-body .detail-chips {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.process-body .detail-chips span {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--ink-50);
+  border: 1px solid var(--ink-100);
+  font-size: 13px;
+  color: var(--ink-700);
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
+/* KPI band */
+.kpi-band {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--ink-100);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--ink-100);
+}
+.kpi-cell {
+  background: white;
+  padding: clamp(24px, 3vw, 40px);
+  text-align: center;
+}
+.kpi-cell .n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 48px);
+  color: var(--ink-900);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+.kpi-cell .n span {
+  color: var(--brand-orange);
+  font-size: .65em;
+}
+.kpi-cell .l {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink-500);
+  max-width: 180px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.4;
+}
+
+/* Responsive extras */
+@media (max-width: 1100px) {
+  .cap-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-band { grid-template-columns: repeat(2, 1fr); }
+  .tower-grid { grid-template-columns: 1fr; gap: 24px; }
+  .tower-center { flex-direction: row; justify-content: center; }
+  .tower-line { min-height: auto; min-width: 40px; height: 2px; width: auto; flex: 1; background: repeating-linear-gradient(90deg, var(--brand-orange) 0 6px, transparent 6px 12px); }
+  .tower-line::before { top: -4px; left: 0; bottom: auto; }
+  .tower-line::after  { top: -4px; right: 0; left: auto; bottom: auto; }
+}
+@media (max-width: 860px) {
+  .cap-grid { grid-template-columns: 1fr; }
+  .carriers-dark { grid-template-columns: 1fr; }
+  .process-step { grid-template-columns: 56px 1fr; gap: 20px; }
+  .process-dot { width: 56px; height: 56px; font-size: 14px; }
+  .process-step:not(:last-child)::after { left: 28px; top: 60px; }
+  .process-body h3 { padding-top: 14px; }
+}
+@media (max-width: 480px) {
+  .kpi-band { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html" class="active">Integração</a>
+      <a href="armazenagem.html">Armazenagem</a>
+      <a href="transportes.html">Transportes</a>
+      <a href="distribuicao.html">Distribuição</a>
+      <a href="segmentos.html">Segmentos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html" class="active">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="contato.html">Contato</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div>
+      <div class="crumb">
+        <a href="index.html">Supporte Logística</a>
+        <span style="margin:0 8px; color:var(--ink-600)">›</span>
+        <span class="active">Integração Logística</span>
+      </div>
+      <span class="eyebrow" style="margin-top:24px; display:inline-flex">Torre de Controle</span>
+      <h1 style="margin-top:16px">Logística integrada, do insumo ao <em>consumidor final</em>.</h1>
+      <p>A Supporte conecta armazenagem, transportes, porto seco e distribuição em um único sistema vivo — processos, pessoas e tecnologia orquestrados pela Torre de Controle.</p>
+      <div style="margin-top:32px; display:flex; gap:12px; flex-wrap:wrap">
+        <a class="btn btn-primary" href="contato.html">Solicite um orçamento →</a>
+        <a class="btn btn-ghost" href="#como-funciona">Como funciona</a>
+      </div>
+    </div>
+    <div class="right-meta">
+      <div class="kv">
+        <span>Acuracidade de estoque</span>
+        <span>+99%</span>
+      </div>
+      <div class="kv">
+        <span>Cumprimento de prazos</span>
+        <span>+97%</span>
+      </div>
+      <div class="kv">
+        <span>Transportadoras homologadas</span>
+        <span>+70</span>
+      </div>
+      <div class="kv">
+        <span>Unidades conectadas</span>
+        <span>4 unidades</span>
+      </div>
+      <div class="kv" style="border-bottom:none">
+        <span>Modais integrados</span>
+        <span>Rodoviário · Aéreo · Fluvial · Marítimo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI BAND -->
+<section style="background:var(--ink-900); padding:0 0 clamp(60px,8vw,100px)">
+  <div class="container">
+    <div class="kpi-band" style="margin-top:clamp(-48px,-4vw,-32px)">
+      <div class="kpi-cell">
+        <div class="n">+99<span>%</span></div>
+        <div class="l">acuracidade de estoque auditada</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="n">+97<span>%</span></div>
+        <div class="l">cumprimento de prazos no transporte</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="n">+70</div>
+        <div class="l">transportadoras homologadas na torre</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="n">4</div>
+        <div class="l">unidades estratégicas no território nacional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- O QUE É INTEGRAÇÃO -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">O conceito</span>
+        <h2 style="margin-top:16px">Um sistema único que <em>orquestra tudo</em>.</h2>
+      </div>
+      <p>Integração logística não é apenas terceirizar etapas — é conectar cada elo da cadeia em tempo real, com visibilidade total e responsabilidade centralizada em um único parceiro.</p>
+    </div>
+
+    <div class="flow-track">
+      <div class="flow-step">
+        <div class="node">01</div>
+        <h3>Recebimento</h3>
+        <p>Entrada de mercadorias nas unidades com conferência automática, registro no WMS e notificação ao cliente em tempo real.</p>
+        <a class="link" href="armazenagem.html">Armazenagem <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></a>
+      </div>
+      <div class="flow-step">
+        <div class="node">02</div>
+        <h3>Armazenagem</h3>
+        <p>Armazéns gerais, porto seco e entreposto ZFM com acuracidade de estoque acima de 99% — rastreabilidade por lote e SKU.</p>
+        <a class="link" href="armazenagem.html">Armazenagem <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></a>
+      </div>
+      <div class="flow-step">
+        <div class="node">03</div>
+        <h3>Transporte</h3>
+        <p>Lotação, fracionado, courier e DTA — seleção inteligente da melhor rota e transportadora via torre de controle.</p>
+        <a class="link" href="transportes.html">Transportes <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></a>
+      </div>
+      <div class="flow-step">
+        <div class="node">04</div>
+        <h3>Entrega</h3>
+        <p>Distribuição com SLA de cumprimento de prazos acima de 97%, rastreio em tempo real e confirmação automática.</p>
+        <a class="link" href="distribuicao.html">Distribuição <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" fill="none"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TORRE DE CONTROLE VISUAL -->
+<section class="sec sec-dark">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow" style="color:white">Torre de Controle</span>
+        <h2 style="margin-top:16px; color:white">O cérebro que <em>conecta tudo</em>.</h2>
+      </div>
+      <p style="color:var(--ink-300)">A Torre de Controle Supporte centraliza a gestão de +70 transportadoras, monitora os estoques em tempo real e garante que cada elo da cadeia opere em sincronia.</p>
+    </div>
+
+    <div class="tower-visual">
+      <div class="tower-grid">
+
+        <div class="tower-pillar">
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/><path d="M9 12h6M12 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h5>WMS — Gestão de Estoque</h5>
+              <p>Rastreabilidade por lote, SKU e localização</p>
+            </div>
+          </div>
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h5>Porto Seco &amp; ZFM</h5>
+              <p>Trâmites aduaneiros integrados ao sistema</p>
+            </div>
+          </div>
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h5>Monitoramento 24/7</h5>
+              <p>Alertas automáticos e visibilidade em tempo real</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tower-center">
+          <div class="tower-line"></div>
+          <div class="tower-hub">
+            <span>Torre de</span>
+            <strong>Controle</strong>
+          </div>
+          <div class="tower-line"></div>
+        </div>
+
+        <div class="tower-pillar">
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11a2 2 0 012 2v3M9 21h10a2 2 0 002-2v-7a2 2 0 00-2-2H9a2 2 0 00-2 2v7a2 2 0 002 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h5>+70 Transportadoras</h5>
+              <p>Malha integrada — melhor rota, menor custo</p>
+            </div>
+          </div>
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <div>
+              <h5>4 Unidades Nacionais</h5>
+              <p>Manaus, Barueri, Uberlândia e Ipojuca</p>
+            </div>
+          </div>
+          <div class="tower-module">
+            <div class="ico">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h5>Dashboards &amp; Relatórios</h5>
+              <p>KPIs operacionais e SLA por contrato</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA — processo detalhado -->
+<section class="sec sec-white" id="como-funciona">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Como funciona</span>
+        <h2 style="margin-top:16px">Da contratação à <em>operação plena</em>.</h2>
+      </div>
+      <p>Um processo estruturado que garante a transição suave da sua operação atual para o modelo integrado Supporte — sem interrupções e com total rastreabilidade.</p>
+    </div>
+
+    <div style="max-width:900px">
+      <div class="process-step">
+        <div class="process-dot">01</div>
+        <div class="process-body">
+          <h3>Diagnóstico da operação atual</h3>
+          <p>Mapeamos os fluxos existentes — armazenagem, transporte, distribuição e aduaneiro — para identificar gargalos, custos ocultos e oportunidades de ganho imediato.</p>
+          <div class="detail-chips">
+            <span>Mapeamento de fluxos</span>
+            <span>Análise de custos</span>
+            <span>Identificação de gargalos</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot">02</div>
+        <div class="process-body">
+          <h3>Desenho da solução integrada</h3>
+          <p>Projetamos a operação ideal com os modais, unidades e transportadoras mais adequados — conectando armazenagem, transporte e distribuição em um único contrato com SLA definido.</p>
+          <div class="detail-chips">
+            <span>Seleção de modais</span>
+            <span>Definição de SLA</span>
+            <span>Estruturação do contrato</span>
+            <span>Roteamento otimizado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot">03</div>
+        <div class="process-body">
+          <h3>Implantação e migração</h3>
+          <p>Ativamos o WMS, integramos os sistemas do cliente via EDI ou API, cadastramos os produtos nas unidades e realizamos o treinamento das equipes — com cronograma acordado.</p>
+          <div class="detail-chips">
+            <span>Integração EDI / API</span>
+            <span>Implantação WMS</span>
+            <span>Treinamento de equipes</span>
+            <span>Testes operacionais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-step">
+        <div class="process-dot">04</div>
+        <div class="process-body">
+          <h3>Operação monitorada pela Torre de Controle</h3>
+          <p>A operação entra em regime com monitoramento 24/7 pela Torre de Controle — gestão ativa das transportadoras, visibilidade de estoque e relatórios de performance mensais.</p>
+          <div class="detail-chips">
+            <span>Monitoramento 24/7</span>
+            <span>Gestão de transportadoras</span>
+            <span>Relatórios mensais de SLA</span>
+            <span>Dashboard em tempo real</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-step" style="padding-bottom:0">
+        <div class="process-dot">05</div>
+        <div class="process-body">
+          <h3>Melhoria contínua e expansão</h3>
+          <p>Com a operação estabilizada, revisamos os indicadores periodicamente para ajustar rotas, renegociar fretes e expandir a integração conforme o crescimento do cliente.</p>
+          <div class="detail-chips">
+            <span>Revisão de indicadores</span>
+            <span>Renegociação de fretes</span>
+            <span>Expansão de operações</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPACIDADES -->
+<section class="sec sec-soft">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Capacidades</span>
+        <h2 style="margin-top:16px">Tudo que sua operação <em>precisa</em>, integrado.</h2>
+      </div>
+      <p>Da logística aduaneira à última milha — a Supporte oferece cada pilar com excelência operacional e os conecta em um sistema coerente e rastreável.</p>
+    </div>
+
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="num">CAP 01</div>
+        <h4>Armazenagem &amp; WMS</h4>
+        <p>Armazéns gerais, porto seco e entreposto da Zona Franca de Manaus com sistema de gestão de estoque integrado — acuracidade auditada acima de 99%.</p>
+        <div class="tag-list">
+          <span>Armazéns Gerais</span>
+          <span>Porto Seco</span>
+          <span>Entreposto ZFM</span>
+          <span>WMS</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="num">CAP 02</div>
+        <h4>Transporte Multimodal</h4>
+        <p>Lotação, fracionado, courier e DTA — seleção inteligente da melhor combinação de modais (rodoviário, cabotagem, aéreo e fluvial) para cada rota.</p>
+        <div class="tag-list">
+          <span>Rodoviário</span>
+          <span>Cabotagem</span>
+          <span>Aéreo</span>
+          <span>Fluvial</span>
+          <span>DTA</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="num">CAP 03</div>
+        <h4>Distribuição &amp; Last Mile</h4>
+        <p>Transporte de distribuição com SLA de cumprimento de prazos acima de 97% — atendendo B2B e B2C, do ponto de venda ao consumidor final.</p>
+        <div class="tag-list">
+          <span>B2B</span>
+          <span>B2C</span>
+          <span>E-commerce</span>
+          <span>Varejo</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="num">CAP 04</div>
+        <h4>Logística Aduaneira</h4>
+        <p>Porto seco e entreposto da Zona Franca de Manaus para agilidade nos trâmites aduaneiros — mais controle e economia na importação e exportação.</p>
+        <div class="tag-list">
+          <span>Porto Seco</span>
+          <span>ZFM</span>
+          <span>Importação</span>
+          <span>Exportação</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="num">CAP 05</div>
+        <h4>Torre de Controle</h4>
+        <p>Gestão centralizada de +70 transportadoras homologadas, monitoramento 24/7 dos KPIs operacionais e relatórios de SLA mensais para total transparência.</p>
+        <div class="tag-list">
+          <span>+70 Transportadoras</span>
+          <span>Monitoramento 24/7</span>
+          <span>Dashboards</span>
+          <span>SLA Garantido</span>
+        </div>
+      </div>
+      <div class="cap-card">
+        <div class="num">CAP 06</div>
+        <h4>Integração de Sistemas</h4>
+        <p>Conexão com o ERP e sistemas do cliente via EDI ou API — visibilidade bidirecional de estoques, pedidos, faturas e status de entrega em tempo real.</p>
+        <div class="tag-list">
+          <span>EDI</span>
+          <span>API REST</span>
+          <span>ERP</span>
+          <span>Rastreamento Online</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTES × DEPOIS -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head" style="margin-bottom:clamp(32px,4vw,56px)">
+      <div>
+        <span class="eyebrow">Antes e depois</span>
+        <h2 style="margin-top:16px">O que muda quando a logística se torna <em>integrada</em>.</h2>
+      </div>
+      <p>Operações fragmentadas geram custo oculto, retrabalho e perda de SLA. A integração Supporte elimina esses pontos cegos com controle centralizado.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card before">
+        <div class="lbl">Sem integração</div>
+        <h3>Operação fragmentada</h3>
+        <ul>
+          <li>Múltiplos fornecedores sem visibilidade centralizada</li>
+          <li>Estoque sem rastreabilidade por SKU e lote</li>
+          <li>Transportadoras gerenciadas individualmente</li>
+          <li>SLA difícil de medir e garantir</li>
+          <li>Custo de logística aduaneira elevado e imprevisível</li>
+          <li>Relatórios manuais e desatualizados</li>
+          <li>Risco operacional distribuído sem controle</li>
+        </ul>
+      </div>
+
+      <div class="compare-arrow">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="compare-card after">
+        <div class="lbl">Com Supporte Integração</div>
+        <h3>Operação integrada</h3>
+        <ul>
+          <li>Um único parceiro responsável de ponta a ponta</li>
+          <li>Acuracidade de estoque auditada acima de 99%</li>
+          <li>+70 transportadoras gerenciadas pela Torre de Controle</li>
+          <li>SLA contratual com cumprimento acima de 97%</li>
+          <li>Logística aduaneira (Porto Seco e ZFM) integrada ao fluxo</li>
+          <li>Dashboards em tempo real com rastreamento online</li>
+          <li>Responsabilidade centralizada e risco gerenciado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPORTADORAS -->
+<section class="sec sec-soft">
+  <div class="container">
+    <div class="carriers-dark">
+      <div style="position:relative; z-index:2">
+        <span class="eyebrow">Malha logística</span>
+        <h2 style="margin-top:16px; color:white">A maior rede de <em style="font-style:normal; color:var(--brand-orange)">transportadoras homologadas</em>.</h2>
+        <p style="color:var(--ink-300)">A Torre de Controle Supporte centraliza a gestão de mais de 70 transportadoras homologadas — selecionando a melhor rota, o melhor custo e o menor prazo para cada operação.</p>
+        <div style="margin-top:32px; display:flex; gap:12px; flex-wrap:wrap">
+          <a class="btn btn-primary" href="contato.html">Solicite um orçamento →</a>
+          <a class="btn btn-ghost" href="transportes.html">Ver transportes</a>
+        </div>
+      </div>
+      <div style="position:relative; z-index:2; text-align:center">
+        <div class="carriers-big">+<span>70</span></div>
+        <div class="carriers-label">transportadoras homologadas</div>
+        <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px; text-align:left">
+          <div style="display:flex; align-items:center; gap:10px; color:var(--ink-300); font-size:13px">
+            <div style="width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0"></div>
+            Rodoviário — cobertura nacional
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; color:var(--ink-300); font-size:13px">
+            <div style="width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0"></div>
+            Aéreo — entregas expressas
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; color:var(--ink-300); font-size:13px">
+            <div style="width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0"></div>
+            Cabotagem — Sudeste ao Norte
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; color:var(--ink-300); font-size:13px">
+            <div style="width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0"></div>
+            Fluvial — Zona Franca de Manaus
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIDADES NACIONAIS -->
+<section class="sec sec-dark map-sec">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Rede nacional</span>
+        <h2 style="margin-top:16px; color:white">Quatro unidades conectadas, <em>um sistema único</em>.</h2>
+      </div>
+      <p style="color:var(--ink-300)">Cada unidade é um ponto estratégico da rede — e todas são monitoradas e gerenciadas em tempo real pela Torre de Controle Supporte.</p>
+    </div>
+
+    <div class="loc-grid">
+      <div class="loc-card">
+        <div class="flag"></div>
+        <div class="idx">UNIDADE 01</div>
+        <h3>Uberlândia / MG</h3>
+        <div class="metrics">
+          <div class="metric"><span class="k">Tipo</span><span class="v">Matriz · Porto Seco</span></div>
+          <div class="metric"><span class="k">Capacidade</span><span class="v">300.000 m²</span></div>
+          <div class="metric"><span class="k">Região</span><span class="v">Centro-Oeste</span></div>
+          <div class="metric"><span class="k">Serviços</span><span class="v">Armazéns · DTA</span></div>
+        </div>
+      </div>
+      <div class="loc-card">
+        <div class="flag"></div>
+        <div class="idx">UNIDADE 02</div>
+        <h3>Ipojuca / PE</h3>
+        <div class="metrics">
+          <div class="metric"><span class="k">Tipo</span><span class="v">Porto Seco</span></div>
+          <div class="metric"><span class="k">Capacidade</span><span class="v">270.000 m²</span></div>
+          <div class="metric"><span class="k">Região</span><span class="v">Nordeste portuário</span></div>
+          <div class="metric"><span class="k">Serviços</span><span class="v">Importação · Exportação</span></div>
+        </div>
+      </div>
+      <div class="loc-card">
+        <div class="flag"></div>
+        <div class="idx">UNIDADE 03</div>
+        <h3>Manaus / AM</h3>
+        <div class="metrics">
+          <div class="metric"><span class="k">Tipo</span><span class="v">Entreposto ZFM</span></div>
+          <div class="metric"><span class="k">Capacidade</span><span class="v">36.500 m²</span></div>
+          <div class="metric"><span class="k">Região</span><span class="v">Norte · Zona Franca</span></div>
+          <div class="metric"><span class="k">Serviços</span><span class="v">ZFM · Fluvial</span></div>
+        </div>
+      </div>
+      <div class="loc-card">
+        <div class="flag"></div>
+        <div class="idx">UNIDADE 04</div>
+        <h3>Barueri / SP</h3>
+        <div class="metrics">
+          <div class="metric"><span class="k">Tipo</span><span class="v">Armazéns Gerais</span></div>
+          <div class="metric"><span class="k">Capacidade</span><span class="v">12.500 m²</span></div>
+          <div class="metric"><span class="k">Região</span><span class="v">Sudeste</span></div>
+          <div class="metric"><span class="k">Serviços</span><span class="v">Cross-docking · Fulfillment</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="diffs-grid">
+      <div class="diffs-left">
+        <span class="eyebrow">Por que a Supporte</span>
+        <h2 style="margin-top:16px">Integração com <em>nível de excelência</em> operacional.</h2>
+        <p>Não entregamos apenas logística — assumimos a responsabilidade pela performance de ponta a ponta, com indicadores auditados e visibilidade total.</p>
+        <div class="badge-wall">
+          <span class="tag">Contrato único</span>
+          <span class="tag">SLA garantido</span>
+          <span class="tag">Monitoramento 24/7</span>
+          <span class="tag">+70 transportadoras</span>
+          <span class="tag">4 unidades nacionais</span>
+          <span class="tag">Logística aduaneira</span>
+        </div>
+      </div>
+
+      <div class="diffs-right">
+        <div class="diff-item">
+          <div class="num">01</div>
+          <div>
+            <h4>Responsabilidade de ponta a ponta</h4>
+            <p>Um único contrato, um único parceiro responsável — do recebimento à entrega final, sem terceirização de responsabilidade.</p>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">02</div>
+          <div>
+            <h4>Visibilidade em tempo real</h4>
+            <p>Dashboard com status de estoques, pedidos em trânsito e entregas realizadas — acesso contínuo via portal do cliente.</p>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">03</div>
+          <div>
+            <h4>Customização sem burocracia</h4>
+            <p>Cada operação tem suas particularidades — desenhamos a solução sob medida sem contratos engessados ou cobranças por adaptação.</p>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+        <div class="diff-item">
+          <div class="num">04</div>
+          <div>
+            <h4>Capacidade logística aduaneira</h4>
+            <p>Porto seco e entreposto ZFM integrados ao fluxo — para quem importa ou exporta, reduz custo e burocracia de forma significativa.</p>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTES -->
+<section class="sec sec-soft" style="padding-top:80px; padding-bottom:80px">
+  <div class="container">
+    <div class="clients-inner">
+      <div class="clients-label">
+        <span class="eyebrow">Clientes</span>
+        <h4 style="margin-top:8px">Empresas que confiam na integração Supporte.</h4>
+      </div>
+      <div class="logos">
+        <div class="logo-cell">BIC</div>
+        <div class="logo-cell">BAT</div>
+        <div class="logo-cell">COPAG</div>
+        <div class="logo-cell">AUTUS</div>
+        <div class="logo-cell">MONDIAL</div>
+        <div class="logo-cell">PIONEER</div>
+        <div class="logo-cell">TRIUMPH</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Próximo passo</span>
+    <h2 style="margin-top:20px">Vamos integrar a <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">sua operação</em> também.</h2>
+    <p>Mapeamos sua cadeia atual e montamos a solução integrada ideal — armazenagem, transportes, distribuição e torre de controle em um único contrato com SLA garantido.</p>
+    <a class="btn btn-dark" href="contato.html">Solicite um orçamento →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">
+          Rodovia BR-365, km 622, s/n<br>
+          Uberlândia — MG<br>
+          +55 (34) 3228-9500
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Soluções</h5>
+        <ul>
+          <li><a href="armazenagem.html">Armazenagem</a></li>
+          <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+          <li><a href="armazenagem.html">Porto Seco</a></li>
+          <li><a href="transportes.html">Transportes</a></li>
+          <li><a href="integracao.html">Torre de Controle</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="segmentos.html">Segmentos</a></li>
+          <li><a href="#">Clientes</a></li>
+          <li><a href="#">Conteúdos</a></li>
+          <li><a href="#">A Supporte</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Contato</h5>
+        <ul>
+          <li><a href="contato.html">Solicitar orçamento</a></li>
+          <li><a href="#">Portal do Cliente</a></li>
+          <li><a href="#">Trabalhe Conosco</a></li>
+          <li><a href="contato.html">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

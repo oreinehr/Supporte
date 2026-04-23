@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suporte — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   SUPORTE PAGE — page-specific styles
+   ============================================================ */
+
+/* HERO */
+.suporte-hero{
+  background: var(--ink-900);
+  padding: 100px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.suporte-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 60% at 80% 40%, rgba(241,90,36,.18) 0%, transparent 70%);
+  pointer-events:none;
+}
+.suporte-hero .container{ position:relative; z-index:1 }
+.suporte-hero .breadcrumb{
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.suporte-hero .breadcrumb a{ color: var(--ink-400); }
+.suporte-hero .breadcrumb a:hover{ color: var(--white); }
+.suporte-hero .breadcrumb span{ color: var(--brand-orange); }
+.suporte-hero h1{ color: var(--white); max-width: 720px; margin-bottom: 20px; }
+.suporte-hero h1 em{ font-style:normal; color: var(--brand-orange); }
+.suporte-hero .lede{ color: var(--ink-300); font-size: 18px; max-width: 560px; line-height: 1.6; margin-bottom: 48px; }
+.suporte-hero .status-row{
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.suporte-hero .status-badge{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--ink-300);
+  font-weight: 500;
+}
+.suporte-hero .status-badge .dot-online{
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--signal-green);
+  box-shadow: 0 0 0 3px rgba(34,197,94,.25);
+  flex-shrink: 0;
+}
+
+/* CHANNELS */
+.channels-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--ink-100);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-top: 64px;
+}
+.channel-card{
+  background: var(--white);
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: background .2s;
+}
+.channel-card:hover{ background: var(--ink-50); }
+.channel-icon{
+  width: 52px; height: 52px;
+  border-radius: var(--r-md);
+  background: var(--brand-orange-100);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.channel-icon svg{ color: var(--brand-orange); }
+.channel-card h3{ font-size: 20px; color: var(--ink-900); margin: 0; }
+.channel-card p{ color: var(--ink-500); font-size: 15px; line-height: 1.55; flex: 1; margin: 0; }
+.channel-card .channel-detail{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: var(--ink-900);
+  font-weight: 500;
+}
+.channel-card .channel-hours{
+  font-size: 12px;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.channel-card .btn{ margin-top: 4px; align-self: flex-start; }
+.channel-card .btn-outline{
+  border: 1.5px solid var(--ink-100);
+  color: var(--ink-800);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color .2s, color .2s;
+}
+.channel-card .btn-outline:hover{
+  border-color: var(--brand-orange);
+  color: var(--brand-orange);
+}
+.channel-card.highlight{
+  background: var(--ink-900);
+}
+.channel-card.highlight h3,
+.channel-card.highlight .channel-detail{ color: var(--white); }
+.channel-card.highlight p,
+.channel-card.highlight .channel-hours{ color: var(--ink-400); }
+.channel-card.highlight .btn-outline{
+  border-color: rgba(255,255,255,.15);
+  color: var(--white);
+}
+.channel-card.highlight .btn-outline:hover{
+  border-color: var(--brand-orange);
+  color: var(--brand-orange);
+}
+
+/* SLA */
+.sla-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.sla-item{
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 32px;
+  border: 1px solid var(--ink-100);
+  border-radius: var(--r-lg);
+  transition: border-color .2s, box-shadow .2s;
+}
+.sla-item:hover{
+  border-color: var(--brand-orange);
+  box-shadow: var(--shadow-glow);
+}
+.sla-num{
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--brand-orange);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 80px;
+  letter-spacing: -0.04em;
+}
+.sla-item h4{ font-size: 16px; margin-bottom: 6px; }
+.sla-item p{ color: var(--ink-500); font-size: 14px; line-height: 1.55; margin: 0; }
+
+/* FAQ */
+.faq-wrap{
+  max-width: 800px;
+  margin: 0 auto;
+}
+.faq-item{
+  border-bottom: 1px solid var(--ink-100);
+}
+.faq-trigger{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink-900);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.faq-trigger:hover{ color: var(--brand-orange); }
+.faq-trigger .icon{
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-100);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: transform .25s, background .2s, border-color .2s;
+  color: var(--ink-500);
+}
+.faq-item.open .faq-trigger .icon{
+  transform: rotate(45deg);
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: white;
+}
+.faq-body{
+  display: none;
+  padding-bottom: 24px;
+  color: var(--ink-500);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.faq-item.open .faq-body{ display: block; }
+
+/* PORTAL */
+.portal-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.portal-card{
+  padding: 32px 28px;
+  border: 1px solid var(--ink-100);
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color .2s, transform .2s;
+}
+.portal-card:hover{
+  border-color: var(--brand-orange);
+  transform: translateY(-3px);
+}
+.portal-card .tag-num{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+}
+.portal-card h4{ margin: 0; font-size: 17px; }
+.portal-card p{ color: var(--ink-500); font-size: 14px; line-height: 1.55; margin: 0; flex: 1; }
+.portal-card .link{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-orange);
+}
+.portal-card .link:hover{ text-decoration: underline; }
+
+/* RESPONSIVENESS */
+@media(max-width:1024px){
+  .channels-grid{ grid-template-columns: 1fr 1fr; }
+  .portal-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:768px){
+  .channels-grid{ grid-template-columns: 1fr; }
+  .sla-grid{ grid-template-columns: 1fr; }
+  .portal-grid{ grid-template-columns: 1fr; }
+  .suporte-hero{ padding: 80px 0 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html">Integração</a>
+      <a href="armazenagem.html">Armazenagem</a>
+      <a href="transportes.html">Transportes</a>
+      <a href="distribuicao.html">Distribuição</a>
+      <a href="segmentos.html">Segmentos</a>
+      <a href="suporte.html" class="active">Suporte</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="suporte.html">Suporte</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- HERO -->
+<section class="suporte-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Supporte Logística</a>
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span>Suporte</span>
+    </div>
+    <span class="eyebrow">Central de atendimento</span>
+    <h1 style="margin-top:16px">Estamos aqui para <em>resolver</em> com você.</h1>
+    <p class="lede">Atendimento especializado para clientes Supporte — rastreamento, operações, comercial e suporte técnico em um único ponto de contato.</p>
+    <div class="status-row">
+      <div class="status-badge">
+        <span class="dot-online"></span>
+        Atendimento online agora
+      </div>
+      <div class="status-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--signal-green)"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Seg–Sex · 08h às 18h
+      </div>
+      <div class="status-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="color:var(--signal-green)"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        +55 (34) 3228-9500
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNELS -->
+<section class="sec sec-white" style="padding-top:80px; padding-bottom:80px">
+  <div class="container">
+    <div class="sec-head" style="margin-bottom:0">
+      <div>
+        <span class="eyebrow">Canais de atendimento</span>
+        <h2 style="margin-top:16px">Escolha o canal mais <em>conveniente</em> para você.</h2>
+      </div>
+      <p>Nossa equipe está disponível por múltiplos canais — escolha o que melhor atende à sua necessidade operacional.</p>
+    </div>
+
+    <div class="channels-grid">
+      <!-- WhatsApp -->
+      <div class="channel-card">
+        <div class="channel-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/>
+          </svg>
+        </div>
+        <h3>WhatsApp</h3>
+        <p>Atendimento ágil para rastreamento de cargas, status de entregas e dúvidas operacionais do dia a dia.</p>
+        <div class="channel-detail">+55 (34) 3228-9500</div>
+        <div class="channel-hours">Seg–Sex · 08h–18h · Sáb 08h–12h</div>
+        <a href="https://wa.me/553432289500" target="_blank" class="btn-outline">
+          Abrir conversa
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+
+      <!-- Telefone (destacado) -->
+      <div class="channel-card highlight">
+        <div class="channel-icon" style="background:rgba(241,90,36,.2)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F15A24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+        </div>
+        <h3>Telefone</h3>
+        <p>Fale diretamente com um especialista Supporte para situações urgentes ou atendimento comercial.</p>
+        <div class="channel-detail">+55 (34) 3228-9500</div>
+        <div class="channel-hours">Seg–Sex · 08h–18h</div>
+        <a href="tel:+553432289500" class="btn-outline">
+          Ligar agora
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+
+      <!-- E-mail -->
+      <div class="channel-card">
+        <div class="channel-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <h3>E-mail</h3>
+        <p>Para solicitações documentadas, envio de NF, relatórios e comunicações formais com nossa equipe.</p>
+        <div class="channel-detail">contato@supportelogistica.com.br</div>
+        <div class="channel-hours">Resposta em até 24h úteis</div>
+        <a href="mailto:contato@supportelogistica.com.br" class="btn-outline">
+          Enviar e-mail
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLA -->
+<section class="sec sec-soft">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Compromissos de atendimento</span>
+        <h2 style="margin-top:16px">Nosso SLA de <em>suporte ao cliente</em>.</h2>
+      </div>
+      <p>Definimos indicadores claros de desempenho para garantir que sua operação nunca fique sem resposta.</p>
+    </div>
+
+    <div class="sla-grid">
+      <div class="sla-item">
+        <div class="sla-num">2h</div>
+        <div>
+          <h4>Tempo de primeira resposta</h4>
+          <p>Toda solicitação recebe um retorno inicial em até 2 horas dentro do horário comercial, com protocolo de atendimento.</p>
+        </div>
+      </div>
+      <div class="sla-item">
+        <div class="sla-num">24h</div>
+        <div>
+          <h4>Resolução de ocorrências padrão</h4>
+          <p>Ocorrências operacionais classificadas como padrão são solucionadas ou escalonadas em até 24 horas úteis.</p>
+        </div>
+      </div>
+      <div class="sla-item">
+        <div class="sla-num">4h</div>
+        <div>
+          <h4>Ocorrências críticas e urgentes</h4>
+          <p>Situações críticas que impactam diretamente a operação do cliente têm tratativa prioritária com resolução em até 4 horas.</p>
+        </div>
+      </div>
+      <div class="sla-item">
+        <div class="sla-num">+97<span style="font-size:24px">%</span></div>
+        <div>
+          <h4>Taxa de cumprimento de prazos</h4>
+          <p>Monitoramos continuamente nossa taxa de resolução dentro do prazo acordado — acima de 97% no acumulado anual.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAL DO CLIENTE -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Portal do cliente</span>
+        <h2 style="margin-top:16px">Acesso completo à sua <em>operação logística</em>.</h2>
+      </div>
+      <p>No Portal do Cliente Supporte você acompanha em tempo real tudo que acontece com sua carga e sua operação.</p>
+    </div>
+
+    <div class="portal-grid">
+      <div class="portal-card">
+        <div class="tag-num">#01</div>
+        <h4>Rastreamento em tempo real</h4>
+        <p>Visualize a posição de cada carga e o status de entrega com atualização em tempo real por todos os modais.</p>
+        <a href="#" class="link">Acessar portal <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+      <div class="portal-card">
+        <div class="tag-num">#02</div>
+        <h4>Gestão de estoque</h4>
+        <p>Consulte saldos, movimentações e inventário dos seus produtos armazenados nas unidades Supporte.</p>
+        <a href="#" class="link">Acessar portal <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+      <div class="portal-card">
+        <div class="tag-num">#03</div>
+        <h4>Ocorrências e chamados</h4>
+        <p>Abra e acompanhe o histórico de chamados, ocorrências e solicitações diretamente pelo portal.</p>
+        <a href="#" class="link">Acessar portal <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+      <div class="portal-card">
+        <div class="tag-num">#04</div>
+        <h4>Documentos e NFs</h4>
+        <p>Acesse notas fiscais, CTes, canhotos digitais e toda a documentação da operação em um só lugar.</p>
+        <a href="#" class="link">Acessar portal <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+      <div class="portal-card">
+        <div class="tag-num">#05</div>
+        <h4>Relatórios gerenciais</h4>
+        <p>Extraia indicadores de desempenho, acuracidade, nível de serviço e evolução da operação por período.</p>
+        <a href="#" class="link">Acessar portal <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+      <div class="portal-card" style="border-color:var(--brand-orange-100); background:var(--brand-orange-100)">
+        <div class="tag-num" style="color:var(--brand-orange)">#PORTAL</div>
+        <h4>Acesse o portal agora</h4>
+        <p>Ainda não tem acesso? Entre em contato com seu gerente de conta para liberar o acesso ao portal.</p>
+        <a href="contato.html" class="link" style="color:var(--brand-orange)">Solicitar acesso <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec sec-soft">
+  <div class="container">
+    <div class="sec-head" style="max-width:800px; margin-bottom:48px">
+      <div>
+        <span class="eyebrow">Perguntas frequentes</span>
+        <h2 style="margin-top:16px">Tire suas <em>dúvidas</em> agora.</h2>
+      </div>
+    </div>
+
+    <div class="faq-wrap">
+
+      <div class="faq-item open">
+        <button class="faq-trigger">
+          Como rastrear minha carga em tempo real?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          O rastreamento está disponível 24h por dia no Portal do Cliente Supporte. Basta acessar com seu login e senha e consultar o painel de cargas ativas. Para cada embarque você verá a posição atual, histórico de eventos e previsão de entrega. Em caso de dúvida, nossa equipe também pode informar o status via WhatsApp ou telefone em tempo real durante o horário comercial.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Como abrir uma ocorrência para uma entrega com problema?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Ocorrências podem ser abertas diretamente no Portal do Cliente, na seção "Chamados", ou enviadas por e-mail para contato@supportelogistica.com.br. Informe o número do embarque, NF, descrição da ocorrência e, quando possível, fotos ou documentos comprobatórios. Após a abertura você receberá um número de protocolo e nossa equipe iniciará a tratativa conforme o SLA contratado.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Quais são os horários de funcionamento das unidades?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Nossas quatro unidades operam de segunda a sexta das 07h às 18h e aos sábados das 07h às 12h. A unidade de Uberlândia (matriz) possui operação estendida para recebimento de cargas. Para agendamento de coleta ou entrega, entre em contato com nossa central com pelo menos 24 horas de antecedência.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Como solicitar um relatório de acuracidade de estoque?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Relatórios de acuracidade estão disponíveis no Portal do Cliente em "Relatórios Gerenciais". É possível gerar relatórios por período, por SKU ou por unidade de armazenagem. Relatórios customizados ou exportações específicas podem ser solicitados pelo e-mail ou diretamente com seu gestor de conta.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Como funciona o processo de desembaraço aduaneiro no Porto Seco?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Nosso Porto Seco em Uberlândia e o Entreposto da Zona Franca de Manaus são habilitados pela Receita Federal para desembaraço aduaneiro de importações e exportações. O processo inclui recebimento da carga, conferência documental, vistoria aduaneira e liberação. Nossa equipe de comércio exterior acompanha cada etapa e mantém o cliente informado. Para iniciar uma operação, entre em contato com nosso time especializado.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Como solicitar segunda via de CTe ou canhoto digital?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Documentos fiscais e canhotos digitais estão disponíveis no Portal do Cliente em "Documentos". Para segunda via de CTe, acesse o portal e filtre por número de embarque ou período. Caso não encontre o documento, envie sua solicitação para contato@supportelogistica.com.br informando o número do CTe e CNPJ do tomador — retornamos em até 24 horas úteis.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger">
+          Como funciona o processo para novos clientes?
+          <span class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </span>
+        </button>
+        <div class="faq-body">
+          Para novos clientes, o processo começa com uma reunião de diagnóstico onde mapeamos as necessidades logísticas da sua operação. Em seguida, nossa equipe comercial elabora uma proposta personalizada contemplando armazenagem, transporte, distribuição e torre de controle conforme necessário. Após aprovação, realizamos a implantação com acompanhamento dedicado. Solicite um orçamento pelo botão abaixo ou ligue para +55 (34) 3228-9500.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ENDERECOS -->
+<section class="sec sec-dark map-sec">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Onde estamos</span>
+        <h2 style="margin-top:16px">Quatro unidades prontas para <em>atender você</em>.</h2>
+      </div>
+      <p>Visite ou agende uma visita técnica em qualquer uma das nossas unidades estratégicas no Brasil.</p>
+    </div>
+
+    <div class="flow-track" style="grid-template-columns: repeat(4,1fr); margin-top:48px">
+      <div class="flow-step">
+        <div class="node">01</div>
+        <h3>Uberlândia / MG</h3>
+        <p style="color:var(--ink-300)">Rodovia BR-365, km 622<br>Matriz · Armazéns Gerais · Porto Seco</p>
+        <span class="mono" style="color:var(--brand-orange)">300.000 m²</span>
+      </div>
+      <div class="flow-step">
+        <div class="node">02</div>
+        <h3>Ipojuca / PE</h3>
+        <p style="color:var(--ink-300)">Porto de Suape<br>Porto Seco · Nordeste portuário</p>
+        <span class="mono" style="color:var(--brand-orange)">270.000 m²</span>
+      </div>
+      <div class="flow-step">
+        <div class="node">03</div>
+        <h3>Manaus / AM</h3>
+        <p style="color:var(--ink-300)">Zona Franca de Manaus<br>Entreposto Aduaneiro</p>
+        <span class="mono" style="color:var(--brand-orange)">36.500 m²</span>
+      </div>
+      <div class="flow-step">
+        <div class="node">04</div>
+        <h3>Barueri / SP</h3>
+        <p style="color:var(--ink-300)">Grande São Paulo<br>Sudeste · Armazéns Gerais</p>
+        <span class="mono" style="color:var(--brand-orange)">12.500 m²</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Não encontrou o que precisava?</span>
+    <h2 style="margin-top:20px">Fale diretamente com um <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">especialista</em>.</h2>
+    <p>Nossa equipe está pronta para entender sua operação e oferecer a solução logística ideal — armazenagem, transportes, distribuição e torre de controle.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:40px">
+      <a class="btn btn-dark" href="contato.html">Solicite um orçamento →</a>
+      <a class="btn" style="background:rgba(255,255,255,.1); color:white; border:1px solid rgba(255,255,255,.15)" href="tel:+553432289500">+55 (34) 3228-9500</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">
+          Rodovia BR-365, km 622, s/n<br>
+          Uberlândia — MG<br>
+          +55 (34) 3228-9500
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Soluções</h5>
+        <ul>
+          <li><a href="armazenagem.html">Armazenagem</a></li>
+          <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+          <li><a href="armazenagem.html">Porto Seco</a></li>
+          <li><a href="transportes.html">Transportes</a></li>
+          <li><a href="integracao.html">Torre de Controle</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="segmentos.html">Segmentos</a></li>
+          <li><a href="#">Clientes</a></li>
+          <li><a href="#">Conteúdos</a></li>
+          <li><a href="#">A Supporte</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Atendimento</h5>
+        <ul>
+          <li><a href="suporte.html">Central de Suporte</a></li>
+          <li><a href="contato.html">Solicitar orçamento</a></li>
+          <li><a href="#">Portal do Cliente</a></li>
+          <li><a href="#">Trabalhe Conosco</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

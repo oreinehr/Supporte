@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Segmentos — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   SEGMENTOS PAGE — extra styles
+   ============================================================ */
+.page-hero{
+  background:var(--ink-900); padding:100px 0 80px;
+  position:relative; overflow:hidden;
+}
+.page-hero::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse 70% 60% at 70% 50%, rgba(241,90,36,.16) 0%, transparent 70%);
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; }
+.page-hero .breadcrumb{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:32px; display:flex; align-items:center; gap:8px; }
+.page-hero .breadcrumb a{ color:var(--ink-400); }
+.page-hero .breadcrumb a:hover{ color:var(--white); }
+.page-hero .breadcrumb span{ color:var(--brand-orange); }
+.page-hero h1{ color:var(--white); max-width:800px; margin-bottom:20px; }
+.page-hero h1 em{ font-style:normal; color:var(--brand-orange); }
+.page-hero .lede{ color:var(--ink-300); font-size:18px; line-height:1.6; max-width:600px; margin-bottom:48px; }
+
+/* Segment detail cards */
+.seg-detail-grid{
+  display:grid; grid-template-columns:repeat(2,1fr); gap:24px;
+}
+.seg-detail-card{
+  border:1px solid var(--ink-100); border-radius:var(--r-xl);
+  overflow:hidden; transition:transform .2s, box-shadow .2s, border-color .2s;
+}
+.seg-detail-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-2); border-color:var(--brand-orange); }
+.seg-detail-card .card-head{
+  padding:40px 36px 32px;
+  background:var(--ink-900);
+  display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+}
+.seg-detail-card .glyph-big{
+  font-family:var(--font-display); font-size:56px; font-weight:700;
+  color:rgba(241,90,36,.3); letter-spacing:-0.04em; line-height:1;
+  flex-shrink:0;
+}
+.seg-detail-card .card-head h3{ color:white; font-size:clamp(20px,2vw,26px); margin:0; flex:1; }
+.seg-detail-card .card-head .tag-badge{
+  background:rgba(241,90,36,.15); border:1px solid rgba(241,90,36,.3);
+  border-radius:999px; padding:4px 12px;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--brand-orange); white-space:nowrap;
+}
+.seg-detail-card .card-body{ padding:32px 36px; background:var(--white); display:flex; flex-direction:column; gap:20px; }
+.seg-detail-card .card-body p{ color:var(--ink-500); font-size:15px; line-height:1.65; margin:0; }
+.seg-detail-card .services-list{ display:flex; flex-direction:column; gap:10px; }
+.seg-detail-card .srv-item{ display:flex; align-items:center; gap:12px; font-size:14px; color:var(--ink-700); }
+.seg-detail-card .srv-item::before{ content:"→"; color:var(--brand-orange); font-weight:700; flex-shrink:0; }
+
+/* Clients section */
+.clients-grid-big{
+  display:grid; grid-template-columns:repeat(7,1fr); gap:2px;
+  background:var(--ink-100); border-radius:var(--r-lg); overflow:hidden;
+}
+.client-tile{
+  background:var(--white); padding:24px 20px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:700; font-size:18px; color:var(--ink-300);
+  letter-spacing:-0.02em; transition:color .2s, background .2s;
+}
+.client-tile:hover{ color:var(--ink-900); background:var(--ink-50); }
+
+/* Why */
+.why-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.why-item{ padding:32px 28px; border:1px solid var(--ink-100); border-radius:var(--r-lg); display:flex; flex-direction:column; gap:12px; }
+.why-item .w-num{ font-family:var(--font-display); font-size:40px; font-weight:700; color:var(--brand-orange-100); letter-spacing:-0.04em; line-height:1; }
+.why-item h4{ margin:0; font-size:17px; }
+.why-item p{ color:var(--ink-500); font-size:14px; line-height:1.6; margin:0; }
+
+@media(max-width:1024px){
+  .seg-detail-grid{ grid-template-columns:1fr; }
+  .clients-grid-big{ grid-template-columns:repeat(4,1fr); }
+  .why-grid{ grid-template-columns:1fr 1fr; }
+}
+@media(max-width:768px){
+  .clients-grid-big{ grid-template-columns:repeat(2,1fr); }
+  .why-grid{ grid-template-columns:1fr; }
+  .page-hero{ padding:80px 0 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html">Integração</a>
+      <a href="armazenagem.html">Armazenagem</a>
+      <a href="transportes.html">Transportes</a>
+      <a href="distribuicao.html">Distribuição</a>
+      <a href="segmentos.html" class="active">Segmentos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="contato.html">Contato</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Supporte Logística</a>
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span>Segmentos</span>
+    </div>
+    <span class="eyebrow">Segmentos atendidos</span>
+    <h1 style="margin-top:16px">Indústrias, varejo, atacado ou e-commerce: <em>chegamos onde estão</em> seus clientes.</h1>
+    <p class="lede">Soluções logísticas customizadas para cada segmento — do insumo à última milha, com acuracidade e prazo garantidos.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="contato.html">Solicite um diagnóstico <span>→</span></a>
+      <a class="btn btn-ghost" href="#segmentos">Ver segmentos</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEGMENTS DETAIL -->
+<section class="sec sec-white" id="segmentos">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Soluções por segmento</span>
+        <h2 style="margin-top:16px">A operação certa para <em>cada mercado</em>.</h2>
+      </div>
+      <p>Cada segmento tem exigências logísticas próprias. Desenhamos a operação ideal para o seu mercado.</p>
+    </div>
+    <div class="seg-detail-grid">
+      <!-- Indústrias -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>Indústrias</h3>
+            <div class="tag-badge" style="margin-top:12px">Inbound · Outbound</div>
+          </div>
+          <div class="glyph-big">IN</div>
+        </div>
+        <div class="card-body">
+          <p>Gerenciamos o fluxo completo de insumos e produtos acabados — do fornecedor à linha de produção e da fábrica ao distribuidor ou consumidor final.</p>
+          <div class="services-list">
+            <div class="srv-item">Inbound de insumos e matérias-primas</div>
+            <div class="srv-item">Cross-docking e transit point</div>
+            <div class="srv-item">Armazenagem de produtos acabados</div>
+            <div class="srv-item">Distribuição nacional multi-canal</div>
+            <div class="srv-item">Gestão de embalagens retornáveis</div>
+          </div>
+        </div>
+      </div>
+      <!-- Distribuidores -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>Distribuidores</h3>
+            <div class="tag-badge" style="margin-top:12px">Nacional · Ponta a ponta</div>
+          </div>
+          <div class="glyph-big">DS</div>
+        </div>
+        <div class="card-body">
+          <p>Operações de alto giro com múltiplos SKUs, janelas de entrega definidas e integração direta com sistemas de gestão do distribuidor.</p>
+          <div class="services-list">
+            <div class="srv-item">Armazenagem com WMS integrado</div>
+            <div class="srv-item">Picking e separação por pedido</div>
+            <div class="srv-item">Transporte fracionado e lotação</div>
+            <div class="srv-item">Roteirização e janela de entrega</div>
+            <div class="srv-item">Relatórios de desempenho</div>
+          </div>
+        </div>
+      </div>
+      <!-- Atacado -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>Atacado</h3>
+            <div class="tag-badge" style="margin-top:12px">Alto giro · SLA garantido</div>
+          </div>
+          <div class="glyph-big">AT</div>
+        </div>
+        <div class="card-body">
+          <p>Operações de alto volume com prazos curtos e cobertura regional ampla — nossa estrutura absorve os picos sem perder eficiência.</p>
+          <div class="services-list">
+            <div class="srv-item">Cargas fracionadas e lotações</div>
+            <div class="srv-item">Entrega em pontos de venda regionais</div>
+            <div class="srv-item">SLA garantido por região</div>
+            <div class="srv-item">Gerenciamento de picos sazonais</div>
+            <div class="srv-item">Rastreamento por pedido</div>
+          </div>
+        </div>
+      </div>
+      <!-- Varejo -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>Varejo</h3>
+            <div class="tag-badge" style="margin-top:12px">B2C · Reposição constante</div>
+          </div>
+          <div class="glyph-big">VA</div>
+        </div>
+        <div class="card-body">
+          <p>Reposição constante para pontos de venda físicos e operações de e-commerce — com a velocidade e a precisão que o varejo exige.</p>
+          <div class="services-list">
+            <div class="srv-item">Reposição de prateleira programada</div>
+            <div class="srv-item">Fulfillment de e-commerce</div>
+            <div class="srv-item">Entrega expressa last-mile</div>
+            <div class="srv-item">Gestão de devoluções (logística reversa)</div>
+            <div class="srv-item">Integração com plataformas digitais</div>
+          </div>
+        </div>
+      </div>
+      <!-- Importação / Exportação -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>Importação & Exportação</h3>
+            <div class="tag-badge" style="margin-top:12px">Porto Seco · Aduaneiro</div>
+          </div>
+          <div class="glyph-big">EX</div>
+        </div>
+        <div class="card-body">
+          <p>Porto seco e entreposto da Zona Franca de Manaus com agilidade nos trâmites aduaneiros e redução do custo de importação.</p>
+          <div class="services-list">
+            <div class="srv-item">Desembaraço aduaneiro in-house</div>
+            <div class="srv-item">DTA — Despacho de Trânsito Aduaneiro</div>
+            <div class="srv-item">Drawback e regimes especiais</div>
+            <div class="srv-item">Benefícios fiscais da ZFM</div>
+            <div class="srv-item">Equipe de COMEX dedicada</div>
+          </div>
+        </div>
+      </div>
+      <!-- E-commerce -->
+      <div class="seg-detail-card">
+        <div class="card-head">
+          <div>
+            <h3>E-commerce</h3>
+            <div class="tag-badge" style="margin-top:12px">Fulfillment · B2B & B2C</div>
+          </div>
+          <div class="glyph-big">EC</div>
+        </div>
+        <div class="card-body">
+          <p>Soluções completas de fulfillment para operações digitais — do recebimento do estoque ao last-mile, com experiência de entrega que fideliza.</p>
+          <div class="services-list">
+            <div class="srv-item">Recebimento e gestão de estoque</div>
+            <div class="srv-item">Picking, packing e etiquetagem</div>
+            <div class="srv-item">Integração com Shopify, VTEX, Magento</div>
+            <div class="srv-item">Rastreamento em tempo real</div>
+            <div class="srv-item">Gestão de devoluções simplificada</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTES -->
+<section class="sec sec-soft" style="padding-top:80px; padding-bottom:80px">
+  <div class="container">
+    <div class="clients-inner">
+      <div class="clients-label">
+        <span class="eyebrow">Clientes</span>
+        <h4 style="margin-top:8px">Empresas nacionais e multinacionais que confiam na Supporte.</h4>
+      </div>
+      <div class="clients-grid-big">
+        <div class="client-tile">BIC</div>
+        <div class="client-tile">BAT</div>
+        <div class="client-tile">COPAG</div>
+        <div class="client-tile">AUTUS</div>
+        <div class="client-tile">MONDIAL</div>
+        <div class="client-tile">PIONEER</div>
+        <div class="client-tile">TRIUMPH</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE A SUPPORTE -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Por que a Supporte</span>
+        <h2 style="margin-top:16px">O parceiro certo para <em>operações exigentes</em>.</h2>
+      </div>
+      <p>Independente do segmento, nossa infraestrutura e expertise garantem a melhor experiência logística para você e seus clientes.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="w-num">01</div>
+        <h4>Customização completa</h4>
+        <p>Cada operação é desenhada do zero para as necessidades específicas do cliente — sem soluções engessadas.</p>
+      </div>
+      <div class="why-item">
+        <div class="w-num">02</div>
+        <h4>Infraestrutura própria</h4>
+        <p>+619 mil m² de área própria, frota própria e parceira, e equipes dedicadas em 4 unidades estratégicas.</p>
+      </div>
+      <div class="why-item">
+        <div class="w-num">03</div>
+        <h4>Tecnologia integrada</h4>
+        <p>WMS, TMS, rastreamento em tempo real e portal do cliente integrados — visibilidade total da operação.</p>
+      </div>
+      <div class="why-item">
+        <div class="w-num">04</div>
+        <h4>Expertise aduaneira</h4>
+        <p>Porto Seco e Entreposto ZFM habilitados pela Receita Federal — o diferencial para operações de importação.</p>
+      </div>
+      <div class="why-item">
+        <div class="w-num">05</div>
+        <h4>SLAs garantidos</h4>
+        <p>+99% de acuracidade de estoque e +97% de cumprimento de prazos — indicadores auditados e documentados.</p>
+      </div>
+      <div class="why-item">
+        <div class="w-num">06</div>
+        <h4>Parceria de longo prazo</h4>
+        <p>Acompanhamos o crescimento dos nossos clientes — escalamos a operação junto com o negócio deles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Próximo passo</span>
+    <h2 style="margin-top:20px">Fale com um <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">especialista</em> do seu segmento.</h2>
+    <p>Mapeamos sua operação atual e apresentamos a solução logística ideal — personalizada para o seu mercado e suas metas.</p>
+    <a class="btn btn-dark" href="contato.html">Solicite um diagnóstico →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">Rodovia BR-365, km 622, s/n<br>Uberlândia — MG<br>+55 (34) 3228-9500</div>
+      </div>
+      <div class="foot-col"><h5>Soluções</h5><ul>
+        <li><a href="armazenagem.html">Armazenagem</a></li>
+        <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+        <li><a href="armazenagem.html">Porto Seco</a></li>
+        <li><a href="transportes.html">Transportes</a></li>
+        <li><a href="integracao.html">Torre de Controle</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Segmentos</h5><ul>
+        <li><a href="segmentos.html">Indústrias</a></li>
+        <li><a href="segmentos.html">Distribuidores</a></li>
+        <li><a href="segmentos.html">Varejo</a></li>
+        <li><a href="segmentos.html">E-commerce</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Contato</h5><ul>
+        <li><a href="contato.html">Solicitar orçamento</a></li>
+        <li><a href="suporte.html">Suporte</a></li>
+        <li><a href="#">Portal do Cliente</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

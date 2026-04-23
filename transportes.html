@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Transportes — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   TRANSPORTES PAGE — extra styles
+   ============================================================ */
+.page-hero{
+  background:var(--ink-900); padding:100px 0 80px;
+  position:relative; overflow:hidden;
+}
+.page-hero::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 70% at 75% 40%, rgba(241,90,36,.18) 0%, transparent 70%);
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.page-hero .breadcrumb{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:32px; display:flex; align-items:center; gap:8px; }
+.page-hero .breadcrumb a{ color:var(--ink-400); }
+.page-hero .breadcrumb a:hover{ color:var(--white); }
+.page-hero .breadcrumb span{ color:var(--brand-orange); }
+.page-hero h1{ color:var(--white); margin-bottom:20px; }
+.page-hero h1 em{ font-style:normal; color:var(--brand-orange); }
+.page-hero .lede{ color:var(--ink-300); font-size:18px; line-height:1.6; margin-bottom:40px; }
+.page-hero .hero-stats{ display:flex; gap:40px; padding-top:32px; border-top:1px solid rgba(255,255,255,.08); }
+.page-hero .hero-stats .item .num{ font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--white); letter-spacing:-0.03em; line-height:1; }
+.page-hero .hero-stats .item .num span{ color:var(--brand-orange); }
+.page-hero .hero-stats .item .lbl{ font-size:13px; color:var(--ink-400); margin-top:4px; }
+
+/* Modais visual */
+.modais-visual{
+  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+}
+.modal-tile{
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-lg); padding:28px 24px;
+  display:flex; flex-direction:column; gap:10px;
+  transition:border-color .2s, background .2s;
+}
+.modal-tile:hover{ border-color:rgba(241,90,36,.4); background:rgba(241,90,36,.06); }
+.modal-tile .modal-icon{ font-size:28px; }
+.modal-tile .modal-name{ font-family:var(--font-display); font-size:16px; font-weight:700; color:white; }
+.modal-tile .modal-desc{ font-size:12px; color:var(--ink-400); line-height:1.5; }
+.modal-tile .modal-tag{
+  display:inline-block; background:rgba(241,90,36,.15); border:1px solid rgba(241,90,36,.3);
+  border-radius:999px; padding:3px 10px;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--brand-orange); width:fit-content;
+}
+
+/* Service cards */
+.service-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+.service-card{
+  border:1px solid var(--ink-100); border-radius:var(--r-lg);
+  padding:40px 36px; display:flex; flex-direction:column; gap:16px;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+}
+.service-card:hover{ border-color:var(--brand-orange); transform:translateY(-4px); box-shadow:var(--shadow-2); }
+.service-card .svc-num{ font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-300); }
+.service-card h3{ font-size:24px; margin:0; }
+.service-card .tagline{ font-size:14px; color:var(--brand-orange); font-weight:600; margin:0; }
+.service-card p{ color:var(--ink-500); font-size:15px; line-height:1.6; margin:0; flex:1; }
+.service-card ul{ list-style:none; display:flex; flex-direction:column; gap:8px; margin:0; }
+.service-card ul li{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-600); }
+.service-card ul li::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--brand-orange); flex-shrink:0; }
+
+/* Modais tabs */
+.modais-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:48px; }
+.modal-card{
+  background:var(--ink-800); border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-lg); padding:32px 24px; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  transition:border-color .2s, transform .2s;
+}
+.modal-card:hover{ border-color:var(--brand-orange); transform:translateY(-4px); }
+.modal-card .big-icon{ font-size:40px; }
+.modal-card h4{ color:white; margin:0; font-size:17px; }
+.modal-card p{ color:var(--ink-400); font-size:13px; line-height:1.5; margin:0; }
+
+/* Torre strip */
+.torre-strip{
+  background:var(--ink-900); border-radius:var(--r-xl); padding:56px;
+  display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+  position:relative; overflow:hidden;
+}
+.torre-strip::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse 50% 60% at 100% 50%, rgba(241,90,36,.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+.torre-strip .ts-left{ position:relative; z-index:1; }
+.torre-strip h3{ color:white; font-size:clamp(24px,3vw,36px); margin-bottom:16px; }
+.torre-strip h3 em{ font-style:normal; color:var(--brand-orange); }
+.torre-strip p{ color:var(--ink-300); font-size:16px; line-height:1.6; margin-bottom:32px; }
+.torre-metrics{ display:grid; grid-template-columns:1fr 1fr; gap:16px; position:relative; z-index:1; }
+.torre-metric{
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-md); padding:24px 20px;
+}
+.torre-metric .val{ font-family:var(--font-display); font-size:32px; font-weight:700; color:var(--brand-orange); letter-spacing:-0.03em; line-height:1; }
+.torre-metric .val span{ font-size:18px; }
+.torre-metric .lbl{ font-size:12px; color:var(--ink-400); margin-top:4px; }
+
+@media(max-width:1024px){
+  .page-hero .container{ grid-template-columns:1fr; }
+  .service-grid{ grid-template-columns:1fr; }
+  .modais-grid{ grid-template-columns:1fr 1fr; }
+  .torre-strip{ grid-template-columns:1fr; }
+}
+@media(max-width:768px){
+  .modais-visual{ grid-template-columns:1fr; }
+  .modais-grid{ grid-template-columns:1fr; }
+  .page-hero{ padding:80px 0 60px; }
+  .torre-strip{ padding:36px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html">Integração</a>
+      <a href="armazenagem.html">Armazenagem</a>
+      <a href="transportes.html" class="active">Transportes</a>
+      <a href="distribuicao.html">Distribuição</a>
+      <a href="segmentos.html">Segmentos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="contato.html">Contato</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div>
+      <div class="breadcrumb">
+        <a href="index.html">Supporte Logística</a>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Transportes</span>
+      </div>
+      <span class="eyebrow">Soluções de transporte</span>
+      <h1 style="margin-top:16px">Quatro modais, <em>uma única operação</em> integrada.</h1>
+      <p class="lede">Rodoviário, cabotagem, fluvial e aéreo — com mais de 70 transportadoras homologadas e torre de controle centralizada.</p>
+      <div class="hero-cta" style="margin-bottom:40px">
+        <a class="btn btn-primary" href="contato.html">Solicite um orçamento <span>→</span></a>
+        <a class="btn btn-ghost" href="#servicos">Ver serviços</a>
+      </div>
+      <div class="hero-stats">
+        <div class="item"><div class="num">+97<span>%</span></div><div class="lbl">cumprimento de prazos</div></div>
+        <div class="item"><div class="num">+70</div><div class="lbl">transportadoras homologadas</div></div>
+        <div class="item"><div class="num">4</div><div class="lbl">modais integrados</div></div>
+      </div>
+    </div>
+    <div class="modais-visual">
+      <div class="modal-tile">
+        <div class="modal-icon">🚛</div>
+        <div class="modal-name">Rodoviário</div>
+        <div class="modal-desc">Lotação, fracionado e courier por todo o Brasil com rastreamento em tempo real.</div>
+        <span class="modal-tag">Principal modal</span>
+      </div>
+      <div class="modal-tile">
+        <div class="modal-icon">🚢</div>
+        <div class="modal-name">Cabotagem</div>
+        <div class="modal-desc">Transporte marítimo costeiro integrado às unidades portuárias em Ipojuca e Manaus.</div>
+        <span class="modal-tag">Longa distância</span>
+      </div>
+      <div class="modal-tile">
+        <div class="modal-icon">⛵</div>
+        <div class="modal-name">Fluvial</div>
+        <div class="modal-desc">Especialistas na hidrovia Madeira-Amazonas para atendimento à Zona Franca de Manaus.</div>
+        <span class="modal-tag">Zona Franca</span>
+      </div>
+      <div class="modal-tile">
+        <div class="modal-icon">✈️</div>
+        <div class="modal-name">Aéreo</div>
+        <div class="modal-desc">Cargas urgentes e de alto valor com cobertura para todo o território nacional e internacional.</div>
+        <span class="modal-tag">Alta urgência</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-card">
+      <div class="proof-item"><div class="num">+97<span>%</span></div><div class="lbl">cumprimento de prazos</div></div>
+      <div class="proof-item"><div class="num">+70</div><div class="lbl">transportadoras homologadas</div></div>
+      <div class="proof-item"><div class="num">4</div><div class="lbl">modais de transporte</div></div>
+      <div class="proof-item"><div class="num">24<span>h</span></div><div class="lbl">rastreamento em tempo real</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="sec sec-white" id="servicos">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Serviços de transporte</span>
+        <h2 style="margin-top:16px">Da carga completa ao <em>courier expresso</em>.</h2>
+      </div>
+      <p>Quatro modalidades de transporte rodoviário integradas à torre de controle Supporte — para cada tipo de carga e prazo.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card" style="border-color:var(--brand-orange); box-shadow:var(--shadow-glow)">
+        <div class="svc-num">#01 · Rodoviário</div>
+        <h3>Lotação (FTL)</h3>
+        <p class="tagline">Carga fechada de ponto a ponto</p>
+        <p>Transporte exclusivo com veículo dedicado ao cliente. Ideal para cargas acima de 10 toneladas, com rotas diretas e sem transbordos — menor risco e maior agilidade.</p>
+        <ul>
+          <li>Veículos de 3,5 a 74 toneladas</li>
+          <li>Rota direta sem transbordo</li>
+          <li>Rastreamento em tempo real</li>
+          <li>SLA de entrega garantido em contrato</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="svc-num">#02 · Rodoviário</div>
+        <h3>Fracionado (LTL)</h3>
+        <p class="tagline">Carga parcial com rotas compartilhadas</p>
+        <p>Transporte de volumes e paletes sem necessidade de lotar o veículo — economia no frete e acesso a rotas que seriam inviáveis com carga fechada.</p>
+        <ul>
+          <li>A partir de 1 volume ou 50 kg</li>
+          <li>Rede de distribuição nacional</li>
+          <li>Consolidação em CDs estratégicos</li>
+          <li>Rastreamento por volume</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="svc-num">#03 · Rodoviário</div>
+        <h3>Courier</h3>
+        <p class="tagline">Entrega expressa porta a porta</p>
+        <p>Serviço expresso para documentos, amostras e pequenas encomendas com coleta e entrega no mesmo dia ou em 24 horas, conforme a rota.</p>
+        <ul>
+          <li>Coleta no mesmo dia</li>
+          <li>Entrega em até 24-48h</li>
+          <li>Rastreamento em tempo real</li>
+          <li>Prova de entrega digital</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="svc-num">#04 · Aduaneiro</div>
+        <h3>DTA</h3>
+        <p class="tagline">Despacho de Trânsito Aduaneiro</p>
+        <p>Movimentação de mercadorias sob controle aduaneiro entre pontos habilitados, sem o pagamento imediato de tributos — ideal para importações em trânsito.</p>
+        <ul>
+          <li>Habilitado pela Receita Federal</li>
+          <li>Integrado ao Porto Seco</li>
+          <li>Documentação aduaneira completa</li>
+          <li>Equipe especializada em COMEX</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAIS -->
+<section class="sec sec-dark map-sec">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Modais de transporte</span>
+        <h2 style="margin-top:16px">Escolhemos o melhor modal para <em>cada operação</em>.</h2>
+      </div>
+      <p>A torre de controle Supporte analisa custo, prazo e características da carga para recomendar o modal mais eficiente.</p>
+    </div>
+    <div class="modais-grid">
+      <div class="modal-card">
+        <div class="big-icon">🚛</div>
+        <h4>Rodoviário</h4>
+        <p>Modal principal com cobertura nacional, alta capilaridade e flexibilidade para cargas de todos os tamanhos.</p>
+      </div>
+      <div class="modal-card">
+        <div class="big-icon">🚢</div>
+        <h4>Cabotagem</h4>
+        <p>Navegação costeira entre portos brasileiros com custo reduzido para longas distâncias e grandes volumes.</p>
+      </div>
+      <div class="modal-card">
+        <div class="big-icon">⛵</div>
+        <h4>Fluvial</h4>
+        <p>Hidrovia Madeira-Amazonas para alcançar a Zona Franca de Manaus com eficiência e menor custo operacional.</p>
+      </div>
+      <div class="modal-card">
+        <div class="big-icon">✈️</div>
+        <h4>Aéreo</h4>
+        <p>Para cargas urgentes, de alto valor ou perecíveis que exigem a maior velocidade de entrega disponível.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TORRE DE CONTROLE -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="torre-strip">
+      <div class="ts-left">
+        <span class="eyebrow">Torre de Controle</span>
+        <h3 style="margin-top:16px">O cérebro que <em>orquestra</em> toda a operação.</h3>
+        <p>Nossa torre de controle monitora em tempo real todas as transportadoras homologadas, escolhendo automaticamente a melhor rota, modal e parceiro para cada embarque.</p>
+        <a class="btn btn-primary" href="integracao.html">Conheça a Torre de Controle →</a>
+      </div>
+      <div class="torre-metrics">
+        <div class="torre-metric">
+          <div class="val">+70</div>
+          <div class="lbl">transportadoras homologadas</div>
+        </div>
+        <div class="torre-metric">
+          <div class="val">+97<span>%</span></div>
+          <div class="lbl">cumprimento de prazos</div>
+        </div>
+        <div class="torre-metric">
+          <div class="val">24<span>h</span></div>
+          <div class="lbl">monitoramento ativo</div>
+        </div>
+        <div class="torre-metric">
+          <div class="val">&lt;1<span>%</span></div>
+          <div class="lbl">taxa de sinistralidade</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Próximo passo</span>
+    <h2 style="margin-top:20px">Transporte com <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">+97% de eficiência</em> na entrega.</h2>
+    <p>Nossa equipe mapeia as rotas da sua operação e propõe a solução mais eficiente — modal, transportadora e custo otimizados.</p>
+    <a class="btn btn-dark" href="contato.html">Solicite um orçamento →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">Rodovia BR-365, km 622, s/n<br>Uberlândia — MG<br>+55 (34) 3228-9500</div>
+      </div>
+      <div class="foot-col"><h5>Soluções</h5><ul>
+        <li><a href="armazenagem.html">Armazenagem</a></li>
+        <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+        <li><a href="armazenagem.html">Porto Seco</a></li>
+        <li><a href="transportes.html">Transportes</a></li>
+        <li><a href="integracao.html">Torre de Controle</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Empresa</h5><ul>
+        <li><a href="segmentos.html">Segmentos</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">A Supporte</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Contato</h5><ul>
+        <li><a href="contato.html">Solicitar orçamento</a></li>
+        <li><a href="suporte.html">Suporte</a></li>
+        <li><a href="#">Portal do Cliente</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

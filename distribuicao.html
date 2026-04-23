@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Distribuição — Supporte Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   DISTRIBUIÇÃO PAGE — extra styles
+   ============================================================ */
+.page-hero{
+  background:var(--ink-900); padding:100px 0 80px;
+  position:relative; overflow:hidden;
+}
+.page-hero::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 70% at 75% 40%, rgba(241,90,36,.18) 0%, transparent 70%);
+  pointer-events:none;
+}
+.page-hero .container{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.page-hero .breadcrumb{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-400); margin-bottom:32px; display:flex; align-items:center; gap:8px; }
+.page-hero .breadcrumb a{ color:var(--ink-400); }
+.page-hero .breadcrumb a:hover{ color:var(--white); }
+.page-hero .breadcrumb span{ color:var(--brand-orange); }
+.page-hero h1{ color:var(--white); margin-bottom:20px; }
+.page-hero h1 em{ font-style:normal; color:var(--brand-orange); }
+.page-hero .lede{ color:var(--ink-300); font-size:18px; line-height:1.6; margin-bottom:40px; }
+.page-hero .hero-stats{ display:flex; gap:40px; padding-top:32px; border-top:1px solid rgba(255,255,255,.08); }
+.page-hero .hero-stats .item .num{ font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--white); letter-spacing:-0.03em; line-height:1; }
+.page-hero .hero-stats .item .num span{ color:var(--brand-orange); }
+.page-hero .hero-stats .item .lbl{ font-size:13px; color:var(--ink-400); margin-top:4px; }
+
+/* Dist visual */
+.dist-visual{
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--r-xl); padding:40px; display:flex; flex-direction:column; gap:16px;
+}
+.dist-flow{
+  display:flex; flex-direction:column; gap:2px;
+}
+.dist-node{
+  display:flex; align-items:center; gap:16px;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--r-md); padding:14px 18px;
+  transition:border-color .2s, background .2s;
+}
+.dist-node:hover{ border-color:rgba(241,90,36,.4); background:rgba(241,90,36,.06); }
+.dist-node .n-dot{
+  width:10px; height:10px; border-radius:50%; background:var(--brand-orange);
+  box-shadow:0 0 0 4px rgba(241,90,36,.2); flex-shrink:0;
+}
+.dist-node .n-label{ font-family:var(--font-display); font-size:14px; font-weight:600; color:white; flex:1; }
+.dist-node .n-tag{ font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--brand-orange); }
+.dist-connector{ width:2px; height:16px; background:rgba(241,90,36,.3); margin-left:22px; }
+.dist-kpi{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.dist-kpi-item{
+  background:rgba(241,90,36,.1); border:1px solid rgba(241,90,36,.2);
+  border-radius:var(--r-md); padding:14px 16px;
+}
+.dist-kpi-item .val{ font-family:var(--font-display); font-size:24px; font-weight:700; color:white; letter-spacing:-0.03em; }
+.dist-kpi-item .lbl{ font-size:11px; color:var(--ink-400); margin-top:2px; }
+
+/* Features */
+.features-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.feat-card{
+  padding:36px 32px; border:1px solid var(--ink-100); border-radius:var(--r-lg);
+  display:flex; flex-direction:column; gap:16px;
+  transition:border-color .2s, transform .2s;
+}
+.feat-card:hover{ border-color:var(--brand-orange); transform:translateY(-3px); }
+.feat-card .f-ico{
+  width:48px; height:48px; border-radius:var(--r-md);
+  background:var(--brand-orange-100); display:grid; place-items:center;
+  color:var(--brand-orange);
+}
+.feat-card h4{ margin:0; font-size:17px; }
+.feat-card p{ color:var(--ink-500); font-size:14px; line-height:1.6; margin:0; flex:1; }
+
+/* B2B B2C */
+.channel-split{
+  display:grid; grid-template-columns:1fr 1fr; gap:24px;
+}
+.ch-block{
+  border-radius:var(--r-xl); padding:48px 40px;
+  display:flex; flex-direction:column; gap:20px;
+}
+.ch-block.b2b{ background:var(--ink-900); }
+.ch-block.b2c{ background:var(--brand-orange); }
+.ch-block .ch-tag{ font-family:var(--font-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; opacity:.6; }
+.ch-block h3{ font-size:28px; font-family:var(--font-display); font-weight:700; color:white; margin:0; }
+.ch-block p{ font-size:15px; line-height:1.6; color:rgba(255,255,255,.7); margin:0; }
+.ch-block ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+.ch-block ul li{ font-size:14px; color:rgba(255,255,255,.8); display:flex; align-items:center; gap:10px; }
+.ch-block ul li::before{ content:"✓"; font-weight:700; flex-shrink:0; }
+.ch-block .ch-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2);
+  border-radius:999px; padding:12px 22px; font-size:14px; font-weight:600; color:white;
+  width:fit-content; transition:background .2s;
+}
+.ch-block .ch-btn:hover{ background:rgba(255,255,255,.25); }
+
+@media(max-width:1024px){
+  .page-hero .container{ grid-template-columns:1fr; }
+  .features-grid{ grid-template-columns:1fr 1fr; }
+  .channel-split{ grid-template-columns:1fr; }
+}
+@media(max-width:768px){
+  .features-grid{ grid-template-columns:1fr; }
+  .page-hero{ padding:80px 0 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+  <div class="inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">S</div>
+      <span>Supporte <strong style="color:var(--brand-orange); font-weight:700">Logística</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="integracao.html">Integração</a>
+      <a href="armazenagem.html">Armazenagem</a>
+      <a href="transportes.html">Transportes</a>
+      <a href="distribuicao.html" class="active">Distribuição</a>
+      <a href="segmentos.html">Segmentos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta" href="contato.html">Solicitar orçamento</a>
+      <button class="hamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-menu">
+  <a href="integracao.html">Integração Logística</a>
+  <a href="armazenagem.html">Armazenagem</a>
+  <a href="transportes.html">Transportes</a>
+  <a href="distribuicao.html">Distribuição</a>
+  <a href="segmentos.html">Segmentos</a>
+  <a href="contato.html">Contato</a>
+  <a class="btn btn-primary" href="contato.html">Solicitar orçamento →</a>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div>
+      <div class="breadcrumb">
+        <a href="index.html">Supporte Logística</a>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Distribuição</span>
+      </div>
+      <span class="eyebrow">Transporte de distribuição</span>
+      <h1 style="margin-top:16px">Do armazém ao <em>ponto de venda</em>, no prazo.</h1>
+      <p class="lede">Distribuição B2B e B2C com +97% de cumprimento de prazos — da indústria ao consumidor final, passando por distribuidores e varejo.</p>
+      <div class="hero-cta" style="margin-bottom:40px">
+        <a class="btn btn-primary" href="contato.html">Solicite um orçamento <span>→</span></a>
+        <a class="btn btn-ghost" href="#canais">B2B e B2C</a>
+      </div>
+      <div class="hero-stats">
+        <div class="item"><div class="num">+97<span>%</span></div><div class="lbl">cumprimento de prazos</div></div>
+        <div class="item"><div class="num">100<span>%</span></div><div class="lbl">rastreamento on-line</div></div>
+        <div class="item"><div class="num">4</div><div class="lbl">unidades de distribuição</div></div>
+      </div>
+    </div>
+    <div class="dist-visual">
+      <div class="dist-kpi">
+        <div class="dist-kpi-item">
+          <div class="val">+97%</div>
+          <div class="lbl">SLA de prazos</div>
+        </div>
+        <div class="dist-kpi-item">
+          <div class="val">100%</div>
+          <div class="lbl">Rastreamento</div>
+        </div>
+      </div>
+      <div class="dist-flow">
+        <div class="dist-node">
+          <div class="n-dot"></div>
+          <div class="n-label">Coleta no armazém / fábrica</div>
+          <span class="n-tag">Origem</span>
+        </div>
+        <div class="dist-connector"></div>
+        <div class="dist-node">
+          <div class="n-dot"></div>
+          <div class="n-label">Consolidação no CD Supporte</div>
+          <span class="n-tag">Rota</span>
+        </div>
+        <div class="dist-connector"></div>
+        <div class="dist-node">
+          <div class="n-dot"></div>
+          <div class="n-label">Separação e roteirização</div>
+          <span class="n-tag">Planejamento</span>
+        </div>
+        <div class="dist-connector"></div>
+        <div class="dist-node">
+          <div class="n-dot"></div>
+          <div class="n-label">Entrega no destino final</div>
+          <span class="n-tag">Destino</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-card">
+      <div class="proof-item"><div class="num">+97<span>%</span></div><div class="lbl">cumprimento de prazos de entrega</div></div>
+      <div class="proof-item"><div class="num">100<span>%</span></div><div class="lbl">rastreamento de pedidos</div></div>
+      <div class="proof-item"><div class="num">B2B</div><div class="lbl">e B2C integrados</div></div>
+      <div class="proof-item"><div class="num">POD</div><div class="lbl">prova de entrega digital</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec sec-white">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Como distribuímos</span>
+        <h2 style="margin-top:16px">Tecnologia e processos para <em>entregas sem falhas</em>.</h2>
+      </div>
+      <p>Cada pedido rastreado, cada entrega confirmada — com prova de entrega digital e visibilidade total para o cliente.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h4>Rastreamento em tempo real</h4>
+        <p>Cada entrega rastreada com GPS em tempo real. O cliente acompanha pelo portal ou recebe notificações automáticas por e-mail e SMS.</p>
+      </div>
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h4>Prova de entrega digital (POD)</h4>
+        <p>Assinatura digital, foto e timestamp no momento da entrega. Elimina disputas e comprova o cumprimento do SLA em tempo real.</p>
+      </div>
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h4>Roteirização inteligente</h4>
+        <p>Algoritmo de roteirização calcula a sequência ótima de entregas, reduzindo distância percorrida e aumentando o número de entregas por veículo.</p>
+      </div>
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h4>Gestão de ocorrências</h4>
+        <p>Tentativas sem sucesso, endereço incorreto ou recusa de recebimento são tratadas automaticamente com novo agendamento ou retorno ao remetente.</p>
+      </div>
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h4>Relatórios e indicadores</h4>
+        <p>Painel de indicadores com taxa de entrega na primeira tentativa, tempo médio de entrega, SLA por região e análise de performance por período.</p>
+      </div>
+      <div class="feat-card">
+        <div class="f-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <h4>Notificações automáticas</h4>
+        <p>Destinatário notificado por e-mail e SMS sobre previsão de entrega, chegada do veículo e confirmação de entrega — menos ligações, mais satisfação.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B / B2C -->
+<section class="sec sec-soft" id="canais">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Canais de distribuição</span>
+        <h2 style="margin-top:16px">B2B ou B2C — <em>a solução certa</em> para cada canal.</h2>
+      </div>
+      <p>Operações distintas, equipes especializadas e processos desenhados para as exigências de cada canal de vendas.</p>
+    </div>
+    <div class="channel-split">
+      <div class="ch-block b2b">
+        <div class="ch-tag">Canal B2B</div>
+        <h3>Distribuição para empresas</h3>
+        <p>Atendimento a redes de varejo, distribuidores, atacados e pontos de venda com frequência e volume definidos em contrato.</p>
+        <ul>
+          <li>Agendamento de entregas por janela</li>
+          <li>Entrega em docas e centros de distribuição</li>
+          <li>NF e documentação fiscal completa</li>
+          <li>SLA por ponto de entrega</li>
+          <li>Relatório de performance mensal</li>
+        </ul>
+        <a href="contato.html" class="ch-btn">Solicitar proposta →</a>
+      </div>
+      <div class="ch-block b2c">
+        <div class="ch-tag">Canal B2C</div>
+        <h3>Distribuição para consumidores</h3>
+        <p>Fulfillment e last-mile para e-commerce e operações direto ao consumidor — com experiência de entrega que encanta.</p>
+        <ul>
+          <li>Entrega no endereço do consumidor</li>
+          <li>Rastreamento em tempo real</li>
+          <li>Prova de entrega digital (POD)</li>
+          <li>Gestão de devoluções (reversa)</li>
+          <li>Integração com plataformas e-commerce</li>
+        </ul>
+        <a href="contato.html" class="ch-btn">Solicitar proposta →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <span class="eyebrow">Próximo passo</span>
+    <h2 style="margin-top:20px">Distribuição com <em style="font-style:normal; text-decoration:underline; text-underline-offset:8px">+97% de eficiência</em>.</h2>
+    <p>Nossa equipe mapeia seus canais de distribuição e estrutura a operação ideal — B2B, B2C ou os dois juntos.</p>
+    <a class="btn btn-dark" href="contato.html">Solicite um orçamento →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <h4>Supporte Logística</h4>
+        <p>Facilitamos as experiências de consumo do cidadão.</p>
+        <div class="addr">Rodovia BR-365, km 622, s/n<br>Uberlândia — MG<br>+55 (34) 3228-9500</div>
+      </div>
+      <div class="foot-col"><h5>Soluções</h5><ul>
+        <li><a href="armazenagem.html">Armazenagem</a></li>
+        <li><a href="armazenagem.html">Entreposto ZFM</a></li>
+        <li><a href="armazenagem.html">Porto Seco</a></li>
+        <li><a href="transportes.html">Transportes</a></li>
+        <li><a href="integracao.html">Torre de Controle</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Empresa</h5><ul>
+        <li><a href="segmentos.html">Segmentos</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">A Supporte</a></li>
+      </ul></div>
+      <div class="foot-col"><h5>Contato</h5><ul>
+        <li><a href="contato.html">Solicitar orçamento</a></li>
+        <li><a href="suporte.html">Suporte</a></li>
+        <li><a href="#">Portal do Cliente</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Supporte Logística</span>
+      <span>Facilitamos as experiências de consumo do cidadão.</span>
+    </div>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
