@@ -151,8 +151,8 @@ h4{font-size:clamp(16px, 1.4vw, 18px); font-weight:600}
 .seg-card:hover .cover img{transform:scale(1.06)}
 .seg-card .cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s cubic-bezier(.22,1,.36,1)}
 .seg-card .cover::after{content:""; position:absolute; inset:0; background:linear-gradient(160deg, rgba(11,15,20,.55) 0%, rgba(11,15,20,.35) 60%), radial-gradient(circle at 75% 15%, rgba(241,90,36,.35), transparent 55%)}
-.seg-card .cover .tag{position:absolute; top:14px; left:14px; font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:var(--brand-orange); text-transform:uppercase; background:rgba(241,90,36,.12); padding:6px 10px; border-radius:6px; border:1px solid rgba(241,90,36,.3); z-index:2}
-.seg-card .cover .glyph{position:absolute; bottom:-18px; right:-8px; font-family:var(--font-display); font-weight:700; font-size:110px; color:rgba(255,255,255,.06); line-height:1}
+.seg-card .cover .tag{position:absolute; top:14px; left:14px; font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:var(--brand-orange); text-transform:uppercase; background:rgba(241,90,36,.15); padding:6px 10px; border-radius:6px; border:1px solid rgba(241,90,36,.4); z-index:3}
+.seg-card .cover .glyph{position:absolute; bottom:-18px; right:-8px; font-family:var(--font-display); font-weight:700; font-size:110px; color:rgba(255,255,255,.08); line-height:1; z-index:2}
 .seg-card .body{padding:22px}
 .seg-card h4{font-size:19px; margin-bottom:6px}
 .seg-card p{color:var(--ink-500); font-size:14px}

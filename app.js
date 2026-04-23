@@ -221,8 +221,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          var el = entry.target;
+          el.classList.add('visible');
+          observer.unobserve(el);
+          el.addEventListener('transitionend', function cleanup(e) {
+            if (e.propertyName !== 'opacity') return;
+            el.classList.remove('js-reveal', 'visible');
+            el.style.transitionDelay = '';
+            el.removeEventListener('transitionend', cleanup);
+          });
         }
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
